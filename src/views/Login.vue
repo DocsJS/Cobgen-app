@@ -302,7 +302,7 @@ export default {
 
         celular: self.model.celular,
       };
-      self.$api.post("auth/local/register", register).then((data) => {
+      self.$api.post("api/auth/local/register", register).then((data) => {
         self.register = data;
         const login = {
           identifier: register.email,
