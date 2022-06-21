@@ -150,6 +150,18 @@
                         </v-col>
                         <v-col cols="12">
                           <v-text-field
+                            label="Telefone"
+                            v-model="model.celular"
+                            outlined
+                            flat
+                            solo
+                            dense
+                            color="cyan"
+                            autocomplete="false"
+                          />
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field
                             label="Email"
                             v-model="model.email"
                             outlined
