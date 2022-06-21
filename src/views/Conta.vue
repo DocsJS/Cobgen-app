@@ -456,7 +456,7 @@
                               <v-text-field
                                 dense
                                 solo
-                                flat 
+                                flat
                                 outlined
                                 color="cyan"
                                 v-model="model.Digitodaconta"
@@ -514,7 +514,7 @@ export default {
         Complemento: "",
         Bairro: "",
         cpfcnpj: "",
-        cep: "",
+        CEP: "",
         cidade: "",
         estado: "",
         rg: "",
