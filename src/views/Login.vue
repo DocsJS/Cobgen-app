@@ -299,7 +299,7 @@ export default {
         password: self.model.senha,
         passwordconfirmation: self.model.password,
         username: self.model.username,
-        cpfcnpj: self.model.cpfcnpj,
+
         celular: self.model.celular,
       };
       self.$api.post("auth/local/register", register).then((data) => {
