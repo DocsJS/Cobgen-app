@@ -67,7 +67,17 @@
                           flat
                           color="cyan"
                         ></v-text-field>
-                        <h5>Email</h5>
+                        <h5>Email do Cliente</h5>
+                        <v-text-field
+                          v-model="model.additionalEmails"
+                          offset-y
+                          label="Digite o seu email"
+                          outlined
+                          solo
+                          flat
+                          color="cyan"
+                        ></v-text-field>
+                        <h5>Email do Consultor</h5>
                         <v-text-field
                           v-model="model.email"
                           offset-y
@@ -898,7 +908,7 @@ export default {
       abertura: "",
       placa: "",
       chassi: "",
-
+      additionalEmails: "",
       valordecompra: "",
       marca: "",
       versao: "",
@@ -952,7 +962,7 @@ export default {
       abertura: "",
       placa: "",
       chassi: "",
-
+      additionalEmails: "",
       valordecompra: "",
       marca: "",
       versao: "",
@@ -1067,6 +1077,7 @@ export default {
         .post("financiamentos/email", {
           data: {
             email: self.model.email,
+            additionalEmails: self.model.additionalEmails,
             conta: self.model.conta,
             renavam: self.model.renavam,
             valorentrada: self.model.valorentrada,
@@ -1141,6 +1152,7 @@ export default {
         .put("financiamentos/" + self.finanID.id, {
           data: {
             email: self.model.email,
+            additionalEmails: self.model.additionalEmails,
             conta: self.model.conta,
             renavam: self.model.renavam,
             valorentrada: self.model.valorentrada,

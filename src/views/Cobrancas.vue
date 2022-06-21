@@ -252,7 +252,7 @@ export default {
           text: "Nome",
           align: "start",
           sortable: true,
-          value: "customer",
+          value: "nome",
         },
         {
           text: "Valor",
@@ -285,7 +285,7 @@ export default {
         {
           text: "Nome",
           align: "start",
-          value: "customer",
+          value: "nome",
         },
         {
           text: "Valor",
@@ -303,7 +303,7 @@ export default {
         {
           text: "Nome",
           align: "start",
-          value: "customer",
+          value: "nome",
         },
         {
           text: "descricao",
