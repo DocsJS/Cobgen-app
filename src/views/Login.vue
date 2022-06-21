@@ -299,10 +299,9 @@ export default {
         password: self.model.senha,
         passwordconfirmation: self.model.password,
         username: self.model.username,
-
         celular: self.model.celular,
       };
-      self.$api.post("api/auth/local/register", register).then((data) => {
+      self.$api.post("auth/local/register", register).then((data) => {
         self.register = data;
         const login = {
           identifier: register.email,
