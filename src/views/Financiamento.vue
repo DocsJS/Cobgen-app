@@ -71,13 +71,13 @@
                         <v-text-field
                           v-model="model.additionalEmails"
                           offset-y
-                          label="Digite o seu email"
+                          label="Digite o email do cliente"
                           outlined
                           solo
                           flat
                           color="cyan"
                         ></v-text-field>
-                        <h5>Email do Consultor</h5>
+                        <h5>E-mail de Consulta</h5>
                         <v-text-field
                           v-model="model.email"
                           offset-y
