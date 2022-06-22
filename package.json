@@ -18,6 +18,7 @@
     "vue": "^2.6.11",
     "vue-avatar-editor": "^1.0.4",
     "vue-chartjs": "^4.1.1",
+    "vue-file-agent": "^1.7.3",
     "vue-js-modal": "^2.0.1",
     "vue-numeric": "^2.4.3",
     "vue-rocker-switch": "^1.2.4",

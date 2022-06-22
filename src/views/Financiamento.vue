@@ -756,7 +756,7 @@
                         <form ref="form">
                           <v-row>
                             <v-col cols="12" md="2">
-                              <v-file-input
+                              <!-- <v-file-input
                                 color="cyan"
                                 ref="file"
                                 id="file"
@@ -770,12 +770,24 @@
                                 multiple
                                 label="Enviar os documentos referente ao veiculo e pessoa"
                               >
+                              </v-file-input> -->
+
+                              <v-file-input
+                                color="cyan"
+                                ref="file"
+                                id="file"
+                                @click="chooseFiles"
+                                @change="handleFileUpload"
+                                name="files"
+                                type="file"
+                                offset-y
+                                v-model="arquivoname"
+                                chips
+                                label="Enviar os documentos referente ao veiculo e pessoa"
+                              >
                               </v-file-input>
-                            </v-col>
-                            <v-col>
-                              <v-chip class="ma-2" color="cyan" dark>
-                                {{ arquivo }}
-                              </v-chip>
+                              {{ arquivoname }}
+                              <v-img :src="url ? url : arquivo"></v-img>
                             </v-col>
                           </v-row>
                         </form>
@@ -822,8 +834,11 @@
   </v-app>
 </template>
 <script>
+import Vue from "vue";
 import SideBar from "../components/SideBar";
 import "vue-search-input/dist/styles.css";
+import VueFileAgent from "vue-file-agent";
+Vue.use(VueFileAgent);
 export default {
   data: () => ({
     search: "",
@@ -838,7 +853,10 @@ export default {
       "NÃO POSSUO OCUPAÇÃO",
     ],
     FormularioSelecionado: null,
-    name: "Vue.js",
+    name: null,
+    url: null,
+    arquivo: null,
+    arquivoname: null,
     loading: false,
     dialog: false,
     dialogDelete: false,
@@ -894,7 +912,7 @@ export default {
     clienteSelecionado: null,
     financiamentoSelecionado: null,
     financiamento: [],
-    arquivo: [],
+
     documentos: [
       {
         name: "",
@@ -1030,7 +1048,6 @@ export default {
           self.financiamento = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          // console.table(self.financiamento[0].id);
         })
         .catch((erro) => {
           console.log(erro);
@@ -1044,6 +1061,8 @@ export default {
         .then((res) => {
           self.finanID = res.data.data;
           self.arquivo =
+            self.finanID.attributes.documentos.data[0].attributes.url;
+          self.arquivoname =
             self.finanID.attributes.documentos.data[0].attributes.name;
           console.log(self.arquivo);
         })
@@ -1057,11 +1076,7 @@ export default {
 
     handleFileUpload() {
       let self = this;
-      let form = self.$refs.form;
-      self.$api.post("upload", new FormData(form)).then((res) => {
-        self.documentos = res.data[0];
-        // console.log(self.documentos);
-      });
+      self.url = URL.createObjectURL(self.arquivo);
     },
     doSave() {
       let self = this;
@@ -1072,69 +1087,71 @@ export default {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["financiamento"] = self.financiamentoSelecionado;
-
+      let form = self.$refs.form;
       self.$api
-        .post("financiamentos/email", {
-          data: {
-            email: self.model.email,
-            additionalEmails: self.model.additionalEmails,
-            conta: self.model.conta,
-            renavam: self.model.renavam,
-            valorentrada: self.model.valorentrada,
-            abertura: self.model.abertura,
-            placa: self.model.placa,
-            chassi: self.model.chassi,
-            documentos: self.documentos.id,
-            valordecompra: self.model.valordecompra,
-            marca: self.model.marca,
-            versao: self.model.versao,
-            cor: self.model.cor,
-            fabricacao: self.model.fabricacao,
-            parcelar: self.model.parcelar,
-            outraseguradora: self.model.utraseguradora,
-            seguro: self.model.seguro,
-            banco: self.model.banco,
-            agencia: self.model.agencia,
-            numero: self.model.numero,
-            expedicao: self.model.expedicao,
-            Ativo: self.model.Ativo,
-            endereco: self.model.endereco,
-            oe: self.model.oe,
-            uf: self.model.uf,
-            nome: self.model.nome,
-            cpf: self.model.cpf,
-            rg: self.model.rg,
-            datadenascimento: self.model.datadenascimento,
-            estado: self.model.estado,
-            cidade: self.model.cidade,
-            renda: self.model.renda,
-            profissao: self.model.profissao,
-            cargo: self.model.cargo,
-            cnpj2: self.model.cnpj2,
-            razaosocial: self.model.razaosocial,
-            cep2: self.model.cep2,
-            telefone2: self.model.telefone2,
-            data2: self.model.data2,
-            faturamento: self.model.faturamento,
-            assinar: self.model.assinar,
-            aposentadoria: self.model.aposentadoria,
-            beneficio: self.model.beneficio,
-            atividade: self.model.atividade,
-            nomeempresa: self.model.nomeempresa,
-            admissao: self.model.admissao,
-            telefoneempresa: self.model.telefoneempresa,
-            comprovante: self.model.comprovante,
-            telefonefixo: self.model.telefonefixo,
-            celular: self.model.celular,
-            pai: self.model.pai,
-            mae: self.model.mae,
-          },
+        .post("upload", new FormData(form))
+        .then((res) => {
+          self.documentos = res.data[0];
+          console.log(self.documentos.id);
+          self.$api.post("financiamentos/email", {
+            data: {
+              email: self.model.email,
+              additionalEmails: self.model.additionalEmails,
+              conta: self.model.conta,
+              renavam: self.model.renavam,
+              valorentrada: self.model.valorentrada,
+              abertura: self.model.abertura,
+              placa: self.model.placa,
+              chassi: self.model.chassi,
+              documentos: self.documentos.id,
+              valordecompra: self.model.valordecompra,
+              marca: self.model.marca,
+              versao: self.model.versao,
+              cor: self.model.cor,
+              fabricacao: self.model.fabricacao,
+              parcelar: self.model.parcelar,
+              outraseguradora: self.model.utraseguradora,
+              seguro: self.model.seguro,
+              banco: self.model.banco,
+              agencia: self.model.agencia,
+              numero: self.model.numero,
+              expedicao: self.model.expedicao,
+              Ativo: self.model.Ativo,
+              endereco: self.model.endereco,
+              oe: self.model.oe,
+              uf: self.model.uf,
+              nome: self.model.nome,
+              cpf: self.model.cpf,
+              rg: self.model.rg,
+              datadenascimento: self.model.datadenascimento,
+              estado: self.model.estado,
+              cidade: self.model.cidade,
+              renda: self.model.renda,
+              profissao: self.model.profissao,
+              cargo: self.model.cargo,
+              cnpj2: self.model.cnpj2,
+              razaosocial: self.model.razaosocial,
+              cep2: self.model.cep2,
+              telefone2: self.model.telefone2,
+              data2: self.model.data2,
+              faturamento: self.model.faturamento,
+              assinar: self.model.assinar,
+              aposentadoria: self.model.aposentadoria,
+              beneficio: self.model.beneficio,
+              atividade: self.model.atividade,
+              nomeempresa: self.model.nomeempresa,
+              admissao: self.model.admissao,
+              telefoneempresa: self.model.telefoneempresa,
+              comprovante: self.model.comprovante,
+              telefonefixo: self.model.telefonefixo,
+              celular: self.model.celular,
+              pai: self.model.pai,
+              mae: self.model.mae,
+            },
+          });
         })
+
         .then(() => {
-          // self.$api.post("email", {
-          //   data: { email: self.email },
-          //   res,
-          // });
           self.loading = true;
           setTimeout(() => {
             self.loading = false;
