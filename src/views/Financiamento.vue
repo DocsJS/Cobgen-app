@@ -865,7 +865,6 @@ export default {
     portao: ["Sim", "Não"],
     financiado: ["Sim", "Não"],
     cnh: ["Sim", "Não"],
-
     trabalho: ["Sim", "Não"],
     trabalho2: ["Sim", "Não"],
     faculdade: ["Sim", "Não"],
@@ -1107,6 +1106,7 @@ export default {
               placa: self.model.placa,
               chassi: self.model.chassi,
               documentos: self.documentos,
+              arquivo: self.arquivo,
               valordecompra: self.model.valordecompra,
               marca: self.model.marca,
               versao: self.model.versao,
@@ -1182,6 +1182,7 @@ export default {
             abertura: self.model.abertura,
             placa: self.model.placa,
             chassi: self.model.chassi,
+            arquivo: self.arquivo,
             documentos: self.documentos,
             valordecompra: self.model.valordecompra,
             marca: self.model.marca,
