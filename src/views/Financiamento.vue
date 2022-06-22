@@ -179,8 +179,8 @@
                           flat
                         ></v-text-field>
                         <h5>Possuí CNH</h5>
-                        <v-select
-                          label="Selecione uma opção"
+                        <v-text-field
+                          label="Digite a sua resposta"
                           v-model="model.cnh"
                           :options="cnh"
                           offset-y
@@ -189,7 +189,7 @@
                           color="cyan"
                           solo
                           flat
-                        ></v-select>
+                        ></v-text-field>
                         <h5>OCUPAÇÕES</h5>
                         <v-select
                           label="Selecione uma ocupação"
