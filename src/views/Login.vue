@@ -323,7 +323,7 @@ export default {
 .bg {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   background: url("https://cdn.discordapp.com/attachments/855453874608930816/978664413789835284/cyan.png")
