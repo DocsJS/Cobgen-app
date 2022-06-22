@@ -209,26 +209,16 @@
                             counter
                             @click:append="show2 = !show2"
                           />
+                          <v-btn
+                            color="cyan"
+                            dark
+                            block
+                            tile
+                            @click="doregister"
+                            >Entrar</v-btn
+                          >
                         </v-col>
-                        <v-row>
-                          <v-col cols="12" sm="7">
-                            <v-checkbox
-                              label="Aceito os termos"
-                              class="mt-n1"
-                              color="cyan"
-                            >
-                            </v-checkbox>
-                          </v-col>
-                          <v-col cols="12" sm="5">
-                            <a href="" class="caption cyan--text ml-n4"
-                              >Termos&Condições</a
-                            >
-                          </v-col>
-                        </v-row>
                       </v-row>
-                      <v-btn color="cyan" dark block tile @click="doregister"
-                        >Entrar</v-btn
-                      >
                     </v-card-text>
                   </v-col>
                 </v-row>
