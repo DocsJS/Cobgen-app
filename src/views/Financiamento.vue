@@ -781,7 +781,7 @@
                                 name="files"
                                 type="file"
                                 offset-y
-                                v-model="arquivoname"
+                                v-model="arquivo"
                                 chips
                                 label="Enviar os documentos referente ao veiculo e pessoa"
                               >
@@ -881,11 +881,7 @@ export default {
         sortable: true,
         value: "nome",
       },
-      // {
-      //   text: "Tipo",
-      //   align: "center",
-      //   value: "tipodeseguro",
-      // },
+
       {
         text: "CPF",
         align: "center",
@@ -919,6 +915,8 @@ export default {
       },
     ],
     model: {
+      tempo: "",
+      cnh: "",
       email: "",
       conta: "",
       renavam: "",
@@ -973,6 +971,8 @@ export default {
     },
 
     defaultItem: {
+      tempo: "",
+      cnh: "",
       email: "",
       conta: "",
       renavam: "",
@@ -1096,6 +1096,9 @@ export default {
           self.$api.post("financiamentos/email", {
             data: {
               email: self.model.email,
+              FormularioSelecionado: self.FormularioSelecionado,
+              tempo: self.model.tempo,
+              cnh: self.model.cnh,
               additionalEmails: self.model.additionalEmails,
               conta: self.model.conta,
               renavam: self.model.renavam,
@@ -1110,7 +1113,7 @@ export default {
               cor: self.model.cor,
               fabricacao: self.model.fabricacao,
               parcelar: self.model.parcelar,
-              outraseguradora: self.model.utraseguradora,
+              outraseguradora: self.model.outraseguradora,
               seguro: self.model.seguro,
               banco: self.model.banco,
               agencia: self.model.agencia,
@@ -1169,6 +1172,9 @@ export default {
         .put("financiamentos/" + self.finanID.id, {
           data: {
             email: self.model.email,
+            FormularioSelecionado: self.FormularioSelecionado,
+            tempo: self.model.tempo,
+            cnh: self.model.cnh,
             additionalEmails: self.model.additionalEmails,
             conta: self.model.conta,
             renavam: self.model.renavam,
@@ -1183,7 +1189,7 @@ export default {
             cor: self.model.cor,
             fabricacao: self.model.fabricacao,
             parcelar: self.model.parcelar,
-            outraseguradora: self.model.utraseguradora,
+            outraseguradora: self.model.outraseguradora,
             seguro: self.model.seguro,
             banco: self.model.banco,
             agencia: self.model.agencia,
