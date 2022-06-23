@@ -117,9 +117,9 @@
                         ></v-text-field>
                       </v-col>
                       <v-col>
-                        <h5>CEP</h5>
+                        <h5>Endereço</h5>
                         <v-text-field
-                          label="Digite o seu cep"
+                          label="Digite o seu endereço"
                           v-model="model.postalCode"
                           outlined
                           color="cyan"
