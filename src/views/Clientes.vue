@@ -71,6 +71,21 @@
                         ></v-text-field>
                       </v-col>
                       <v-col>
+                        <h5>Selecione o plano desejado</h5>
+                        <v-select
+                          v-model="planoSelecionado"
+                          offset-y
+                          item-value="id"
+                          item-text="nomePlano"
+                          :items="planos"
+                          label="Selecione o tipo"
+                          outlined
+                          solo
+                          flat
+                          color="cyan"
+                        ></v-select>
+                      </v-col>
+                      <v-col>
                         <h5>Email</h5>
                         <v-text-field
                           label="Digite o seu email"
@@ -149,6 +164,13 @@
             >mdi-delete</v-icon
           >
         </template>
+        <template v-slot:item.plano="{ item }">
+          {{
+            item.plano && item.plano.data && item.plano.data.attributes
+              ? item.plano.data.attributes.nomePlano
+              : ""
+          }}
+        </template>
       </v-data-table>
     </v-col>
   </v-app>
@@ -170,6 +192,11 @@ export default {
         align: "center",
         sortable: true,
         value: "nome",
+      },
+      {
+        text: "Plano",
+        align: "start",
+        value: "plano",
       },
       {
         text: "CPF",
@@ -210,6 +237,7 @@ export default {
       observations: "",
       groupName: "",
       admin: "",
+      plano: "",
     },
     defaultItem: {
       nome: "",
@@ -227,11 +255,17 @@ export default {
       observations: "",
       groupName: "",
       admin: "",
+      plano: "",
     },
-    planos: [],
-    planoSelecionado: null,
+
     subscriptions: [],
     clienteSelecionado: null,
+    planos: [
+      {
+        nomePlano: "",
+      },
+    ],
+    planoSelecionado: null,
     cobrancas: {
       cliente: "",
       billingType: "",
@@ -260,7 +294,7 @@ export default {
     getCliente() {
       let self = this;
       self.$api
-        .get("clientes")
+        .get("clientes?populate=plano")
         .then(({ data }) => {
           self.cliente = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -278,7 +312,7 @@ export default {
     },
     novoCliente() {
       let self = this;
-
+      self.model["plano"] = self.planoSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
 
       self.$api
@@ -297,6 +331,7 @@ export default {
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
+      self.model["plano"] = self.planoSelecionado;
       self.$api
         .put("clientes/" + self.model.id, { data: self.model })
         .then(() => {
