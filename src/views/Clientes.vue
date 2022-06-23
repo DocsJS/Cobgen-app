@@ -295,13 +295,23 @@ export default {
   methods: {
     getCliente() {
       let self = this;
+      const id = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify({
+        where: {
+          child_of: {
+            data: {
+              id: id,
+            },
+          },
+        },
+      });
       self.$api
-        .get("clientes?populate=plano")
+        .get(`clientes?populate=plano&populate=child_of&${query}`)
         .then(({ data }) => {
           self.cliente = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.cliente);
         })
         .catch((erro) => {
           console.log(erro);
@@ -390,7 +400,6 @@ export default {
           self.planos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.planos);
         })
         .catch((erro) => {
           console.log(erro);
@@ -404,7 +413,6 @@ export default {
           self.subscriptions = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.subscriptions);
         })
         .catch((erro) => {
           console.log(erro);
@@ -418,7 +426,6 @@ export default {
           self.cobrancas = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.cobrancas);
         })
         .catch((erro) => {
           console.log(erro);
@@ -432,7 +439,6 @@ export default {
           self.veiculos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.veiculos);
         })
         .catch((erro) => {
           console.log(erro);
@@ -441,6 +447,7 @@ export default {
   },
   mounted() {
     let self = this;
+    console.log(self.$store.state.app.user.id);
     self.getCliente();
     self.getPlanos();
     self.getAssinaturas();
