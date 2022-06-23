@@ -75,6 +75,8 @@
                         <v-select
                           v-model="planoSelecionado"
                           offset-y
+                          multiple
+                          chips
                           item-value="id"
                           item-text="nomePlano"
                           :items="planos"
