@@ -428,19 +428,8 @@ export default {
   methods: {
     getCobrancas() {
       let self = this;
-      const id = self.$store.state.app.user.id;
-      const qs = require("qs");
-      const query = qs.stringify({
-        where: {
-          child_of: {
-            data: {
-              id: id,
-            },
-          },
-        },
-      });
       self.$api
-        .get(`cobrancas?populate=planos&populate=child_of&${query}`)
+        .get(`cobrancas?populate=planos&populate=child_of`)
         .then(({ data }) => {
           self.cobrancas = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -459,22 +448,64 @@ export default {
       let self = this;
       self.model["plano"] = self.planoSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
-      self.$api.post("cobrancas", { data: self.model }).then(() => {
-        setTimeout(() => {
-          self.dialog = false;
-          self.getCobrancas();
-        }, 1000);
-        console.log(self.model["cliente"]);
-      });
+      const child_of = self.$store.state.app.user.id;
+      self.$api
+        .post("cobrancas", {
+          data: {
+            cliente: self.model.cliente,
+            nomePlano: self.model.nomePlano,
+            cpfCnpj: self.model.cpfCnpj,
+            email: self.model.email,
+            phone: self.model.phone,
+            address: self.model.address,
+            addressNumber: self.model.addressNumber,
+            complement: self.model.complement,
+            province: self.model.province,
+            postalCode: self.model.postalCode,
+            externalReference: self.model.externalReference,
+            notification: self.model.notification,
+            additionalEmails: self.model.additionalEmails,
+            observations: self.model.observations,
+            groupName: self.model.groupName,
+            admin: self.model.admin,
+            child_of: child_of,
+          },
+        })
+        .then(() => {
+          setTimeout(() => {
+            self.dialog = false;
+            self.getCobrancas();
+          }, 1000);
+          console.log(self.model["cliente"]);
+        });
     },
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["plano"] = self.planoSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
+      const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("cobrancas/" + self.model.id, { data: self.model })
+        .put("cobrancas/" + self.model.id, {
+          data: {
+            cliente: self.model.cliente,
+            nomePlano: self.model.nomePlano,
+            cpfCnpj: self.model.cpfCnpj,
+            email: self.model.email,
+            phone: self.model.phone,
+            address: self.model.address,
+            addressNumber: self.model.addressNumber,
+            complement: self.model.complement,
+            province: self.model.province,
+            postalCode: self.model.postalCode,
+            externalReference: self.model.externalReference,
+            notification: self.model.notification,
+            additionalEmails: self.model.additionalEmails,
+            observations: self.model.observations,
+            groupName: self.model.groupName,
+            admin: self.model.admin,
+            child_of: child_of,
+          },
+        })
         .then(() => {
           if (self.editedIndex > -1)
             Object.assign(self.cobrancas[self.editedIndex], self.model.id);
@@ -489,7 +520,6 @@ export default {
     },
     editItem(item) {
       let self = this;
-      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.cobrancas.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;

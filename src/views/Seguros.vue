@@ -639,19 +639,9 @@ export default {
   methods: {
     getSeguro() {
       let self = this;
-      const id = self.$store.state.app.user.id;
-      const qs = require("qs");
-      const query = qs.stringify({
-        where: {
-          child_of: {
-            data: {
-              id: id,
-            },
-          },
-        },
-      });
+
       self.$api
-        .get(`seguros?populate=child_of&${query}`)
+        .get(`seguros?populate=child_of`)
         .then(({ data }) => {
           self.seguro = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -671,10 +661,28 @@ export default {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["seguro"] = self.seguroSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
+      const child_of = self.$store.state.app.user.id;
       self.$api
         .post("seguros", {
-          data: self.model,
+          data: {
+            nome: self.model.nome,
+            email: self.model.email,
+            estadocivil: self.model.estadocivil,
+            cep: self.model.cep,
+            residencia: self.model.residencia,
+            portao: self.model.portao,
+            condutor: self.model.condutor,
+            quantidade: self.model.quantidade,
+            placa: self.model.placa,
+            alarme: self.model.alarme,
+            modificacao: self.model.modificacao,
+            financiado: self.model.financiado,
+            trabalho: self.model.trabalho,
+            faculdade: self.model.faculdade,
+            trabalho2: self.model.trabalho2,
+            estacionamento: self.model.estacionamento,
+            child_of: child_of,
+          },
         })
         .then(() => {
           self.loading = true;
@@ -689,9 +697,29 @@ export default {
       let self = this;
       self.model["seguro"] = self.seguroSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
+      const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("seguros/" + self.model.id, { data: self.model })
+        .put("seguros/" + self.model.id, {
+          data: {
+            nome: self.model.nome,
+            email: self.model.email,
+            estadocivil: self.model.estadocivil,
+            cep: self.model.cep,
+            residencia: self.model.residencia,
+            portao: self.model.portao,
+            condutor: self.model.condutor,
+            quantidade: self.model.quantidade,
+            placa: self.model.placa,
+            alarme: self.model.alarme,
+            modificacao: self.model.modificacao,
+            financiado: self.model.financiado,
+            trabalho: self.model.trabalho,
+            faculdade: self.model.faculdade,
+            trabalho2: self.model.trabalho2,
+            estacionamento: self.model.estacionamento,
+            child_of: child_of,
+          },
+        })
         .then(() => {
           if (self.editedIndex > -1)
             Object.assign(self.seguro[self.editedIndex], self.model.id);
@@ -706,7 +734,6 @@ export default {
     },
     editItem(item) {
       let self = this;
-      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.seguro.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;

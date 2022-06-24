@@ -295,19 +295,8 @@ export default {
   methods: {
     getCliente() {
       let self = this;
-      const id = self.$store.state.app.user.id;
-      const qs = require("qs");
-      const query = qs.stringify({
-        where: {
-          child_of: {
-            data: {
-              id: id,
-            },
-          },
-        },
-      });
       self.$api
-        .get(`clientes?populate=planos&populate=child_of&${query}`)
+        .get(`clientes?populate=planos&populate=child_of`)
         .then(({ data }) => {
           self.cliente = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -326,22 +315,64 @@ export default {
       let self = this;
       self.model["plano"] = self.planoSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
-      self.$api.post("clientes", { data: self.model }).then(() => {
-        setTimeout(() => {
-          self.dialog = false;
-          self.getCliente();
-        }, 1000);
-        console.log(self.model["cliente"]);
-      });
+      const child_of = self.$store.state.app.user.id;
+      self.$api
+        .post("clientes", {
+          data: {
+            nome: self.model.nome,
+            cpfCnpj: self.model.cpfCnpj,
+            email: self.model.email,
+            phone: self.model.phone,
+            address: self.model.address,
+            addressNumber: self.model.addressNumber,
+            complement: self.model.complement,
+            province: self.model.province,
+            postalCode: self.model.postalCode,
+            externalReference: self.model.externalReference,
+            notification: self.model.notification,
+            child_of: child_of,
+            additionalEmails: self.model.additionalEmails,
+            observations: self.model.observations,
+            groupName: self.model.groupName,
+            admin: self.model.admin,
+            plano: self.model.plano,
+          },
+        })
+        .then(() => {
+          setTimeout(() => {
+            self.dialog = false;
+            self.getCliente();
+          }, 1000);
+          console.log(self.model["cliente"]);
+        });
     },
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["plano"] = self.planoSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
+      const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("clientes/" + self.model.id, { data: self.model })
+        .put("clientes/" + self.model.id, {
+          data: {
+            nome: self.model.nome,
+            cpfCnpj: self.model.cpfCnpj,
+            email: self.model.email,
+            phone: self.model.phone,
+            address: self.model.address,
+            addressNumber: self.model.addressNumber,
+            complement: self.model.complement,
+            province: self.model.province,
+            postalCode: self.model.postalCode,
+            externalReference: self.model.externalReference,
+            notification: self.model.notification,
+            child_of: child_of,
+            additionalEmails: self.model.additionalEmails,
+            observations: self.model.observations,
+            groupName: self.model.groupName,
+            admin: self.model.admin,
+            plano: self.model.plano,
+          },
+        })
         .then(() => {
           if (self.editedIndex > -1)
             Object.assign(self.cliente[self.editedIndex], self.model.id);
@@ -356,7 +387,6 @@ export default {
     },
     editItem(item) {
       let self = this;
-      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.cliente.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;

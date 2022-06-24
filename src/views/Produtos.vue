@@ -320,19 +320,8 @@ export default {
   methods: {
     getPlanos() {
       let self = this;
-      const id = self.$store.state.app.user.id;
-      const qs = require("qs");
-      const query = qs.stringify({
-        where: {
-          child_of: {
-            data: {
-              id: id,
-            },
-          },
-        },
-      });
       self.$api
-        .get(`planos?populate=child_of&${query}`)
+        .get(`planos?populate=child_of`)
         .then(({ data }) => {
           self.planos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -352,21 +341,57 @@ export default {
       let self = this;
       // self.model["customer"] = self.clienteSelecionado;
       // self.model["id"] = self.planoSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
-      self.$api.post("planos", { data: self.model }).then(() => {
-        setTimeout(() => {
-          self.dialog = false;
-          self.getPlanos();
-        }, 1000);
-      });
+      const child_of = self.$store.state.app.user.id;
+      self.$api
+        .post("planos", {
+          data: {
+            nomePlano: self.model.nomePlano,
+            codigoPlano: self.model.codigoPlano,
+            nomeUnidade: self.model.nomeUnidade,
+            preco: self.model.preco,
+            cobrancaACada: self.model.cobrancaACada,
+            numeroDeVezesDeCobranca: self.model.numeroDeVezesDeCobranca,
+            avaliacaoGratuita: self.model.avaliacaoGratuita,
+            taxaDeConfiguracao: self.model.taxaDeConfiguracao,
+            imposto: self.model.imposto,
+            descricaoDoPlano: self.model.descricaoDoPlano,
+            Ativo: self.model.Ativo,
+            permitirClientesAddComplemento:
+              self.model.permitirClientesAddComplemento,
+            child_of: child_of,
+          },
+        })
+        .then(() => {
+          setTimeout(() => {
+            self.dialog = false;
+            self.getPlanos();
+          }, 1000);
+        });
     },
     save() {
       let self = this;
       // self.model["customer"] = self.clienteSelecionado;
       // self.model["id"] = self.planoSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
+      const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("planos/" + self.model.id, { data: self.model })
+        .put("planos/" + self.model.id, {
+          data: {
+            nomePlano: self.model.nomePlano,
+            codigoPlano: self.model.codigoPlano,
+            nomeUnidade: self.model.nomeUnidade,
+            preco: self.model.preco,
+            cobrancaACada: self.model.cobrancaACada,
+            numeroDeVezesDeCobranca: self.model.numeroDeVezesDeCobranca,
+            avaliacaoGratuita: self.model.avaliacaoGratuita,
+            taxaDeConfiguracao: self.model.taxaDeConfiguracao,
+            imposto: self.model.imposto,
+            descricaoDoPlano: self.model.descricaoDoPlano,
+            Ativo: self.model.Ativo,
+            permitirClientesAddComplemento:
+              self.model.permitirClientesAddComplemento,
+            child_of: child_of,
+          },
+        })
         .then(() => {
           if (self.editedIndex > -1)
             Object.assign(self.planos[self.editedIndex], self.model.id);
@@ -381,7 +406,6 @@ export default {
     },
     editItem(item) {
       let self = this;
-      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.planos.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;
