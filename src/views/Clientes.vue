@@ -307,7 +307,7 @@ export default {
         },
       });
       self.$api
-        .get(`clientes?&populate=child_of&${query}`)
+        .get(`clientes?populate=planos&populate=child_of&${query}`)
         .then(({ data }) => {
           self.cliente = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
