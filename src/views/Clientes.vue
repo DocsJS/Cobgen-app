@@ -19,7 +19,7 @@
         </v-btn>
       </v-app-bar>
       <v-row>
-        <v-col sm="8" class="pa-7">
+        <v-col sm="7" class="pa-7">
           <v-navigation-drawer
             permanent
             expand-on-hover
