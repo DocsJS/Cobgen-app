@@ -1097,6 +1097,7 @@ export default {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["financiamento"] = self.financiamentoSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       let form = self.$refs.form;
       self.$api
         .post("upload", new FormData(form))

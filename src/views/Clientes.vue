@@ -46,6 +46,7 @@
         :search="search"
         :headers="headers"
         :items="cliente"
+        :items2="plano"
         class="elevation-1"
       >
         <template v-slot:top>
@@ -75,8 +76,6 @@
                         <v-select
                           v-model="planoSelecionado"
                           offset-y
-                          multiple
-                          chips
                           item-value="id"
                           item-text="nomePlano"
                           :items="planos"
@@ -197,7 +196,8 @@ export default {
       },
       {
         text: "Plano",
-        align: "start",
+        align: "center",
+        sortable: true,
         value: "plano",
       },
       {
@@ -307,7 +307,7 @@ export default {
         },
       });
       self.$api
-        .get(`clientes?populate=plano&populate=child_of&${query}`)
+        .get(`clientes?&populate=child_of&${query}`)
         .then(({ data }) => {
           self.cliente = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -327,23 +327,19 @@ export default {
       self.model["plano"] = self.planoSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["child_of"] = self.$store.state.app.user.id;
-      self.$api
-        .post("clientes", {
-          data: self.model,
-        })
-        .then(() => {
-          self.loading = true;
-          setTimeout(() => {
-            self.loading = false;
-            self.dialog = false;
-            self.getCliente();
-          }, 1000);
-        });
+      self.$api.post("clientes", { data: self.model }).then(() => {
+        setTimeout(() => {
+          self.dialog = false;
+          self.getCliente();
+        }, 1000);
+        console.log(self.model["cliente"]);
+      });
     },
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["plano"] = self.planoSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api
         .put("clientes/" + self.model.id, { data: self.model })
         .then(() => {
@@ -360,6 +356,7 @@ export default {
     },
     editItem(item) {
       let self = this;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.cliente.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;
@@ -371,14 +368,12 @@ export default {
     },
     deleteItemConfirm() {
       let self = this;
-      self.editedIndex = -1;
       self.$api.delete("clientes/" + self.model.id).then(() => {
         self.dialogDelete = false;
         self.model = Object.assign({}, self.defaultItem);
         self.getCliente();
       });
     },
-
     close() {
       let self = this;
       self.dialog = false;
@@ -390,7 +385,10 @@ export default {
     closeDelete() {
       let self = this;
       self.dialogDelete = false;
-      self.$nextTick(() => {});
+      self.$nextTick(() => {
+        self.model = Object.assign({}, self.defaultItem);
+        self.editedIndex = -1;
+      });
     },
     getPlanos() {
       let self = this;
@@ -400,6 +398,7 @@ export default {
           self.planos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
+          console.log(self.planos);
         })
         .catch((erro) => {
           console.log(erro);

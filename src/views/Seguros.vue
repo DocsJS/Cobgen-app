@@ -651,7 +651,7 @@ export default {
         },
       });
       self.$api
-        .get(`seguros&populate=child_of&${query}`)
+        .get(`seguros?populate=child_of&${query}`)
         .then(({ data }) => {
           self.seguro = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -689,6 +689,7 @@ export default {
       let self = this;
       self.model["seguro"] = self.seguroSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api
         .put("seguros/" + self.model.id, { data: self.model })
         .then(() => {
@@ -705,6 +706,7 @@ export default {
     },
     editItem(item) {
       let self = this;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.seguro.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;

@@ -94,7 +94,7 @@
                       <v-col>
                         <h5>Cliente</h5>
                         <v-select
-                          v-model="model.cliente"
+                          v-model="model.nome"
                           offset-y
                           item-value="nome"
                           item-text="nome"
@@ -250,7 +250,7 @@ export default {
       headers: [
         {
           text: "Nome",
-          align: "start",
+          align: "center",
           sortable: true,
           value: "nome",
         },
@@ -276,7 +276,8 @@ export default {
         },
         {
           text: "Plano",
-          align: "start",
+          align: "center",
+          sortable: true,
           value: "plano",
         },
         { text: "Ações", value: "actions", sortable: false },
@@ -286,6 +287,11 @@ export default {
           text: "Nome",
           align: "start",
           value: "nome",
+        },
+        {
+          text: "Plano",
+          align: "start",
+          value: "plano",
         },
         {
           text: "Valor",
@@ -306,6 +312,11 @@ export default {
           value: "nome",
         },
         {
+          text: "Plano",
+          align: "start",
+          value: "plano",
+        },
+        {
           text: "descricao",
           align: "start",
           value: "descripition",
@@ -322,13 +333,19 @@ export default {
           status: "",
         },
         {
+          text: "Plano",
+          align: "start",
+          value: "plano",
+        },
+        {
           cliente: "",
           status: "",
         },
       ],
       assinaturas: [],
       model: {
-        customer: "",
+        cliente: "",
+        nomePlano: "",
         cpfCnpj: "",
         email: "",
         phone: "",
@@ -345,7 +362,8 @@ export default {
         admin: null,
       },
       defaultItem: {
-        customer: "",
+        cliente: "",
+        nomePlano: "",
         cpfCnpj: "",
         email: "",
         phone: "",
@@ -364,12 +382,13 @@ export default {
       },
       editedIndex: -1,
       editedItem: {
-        customer: "",
+        cliente: "",
+
         billingType: "",
         value: "",
         dueDate: "",
         descripition: "",
-        plano: "",
+        nomePlano: "",
       },
       cobrancas: [],
       cliente: [
@@ -421,12 +440,11 @@ export default {
         },
       });
       self.$api
-        .get(`cobrancas?populate=plano&populate=child_of&${query}`)
+        .get(`cobrancas?populate=planos&populate=child_of&${query}`)
         .then(({ data }) => {
           self.cobrancas = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.table(self.cobrancas);
         })
         .catch((erro) => {
           console.log(erro);
@@ -439,8 +457,8 @@ export default {
     },
     novaCobranca() {
       let self = this;
-      self.model["cliente"] = self.clienteSelecionado;
       self.model["plano"] = self.planoSelecionado;
+      self.model["cliente"] = self.clienteSelecionado;
       self.model["child_of"] = self.$store.state.app.user.id;
       self.$api.post("cobrancas", { data: self.model }).then(() => {
         setTimeout(() => {
@@ -454,6 +472,7 @@ export default {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["plano"] = self.planoSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api
         .put("cobrancas/" + self.model.id, { data: self.model })
         .then(() => {
@@ -470,6 +489,7 @@ export default {
     },
     editItem(item) {
       let self = this;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.cobrancas.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;

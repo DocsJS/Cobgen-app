@@ -364,6 +364,7 @@ export default {
       let self = this;
       // self.model["customer"] = self.clienteSelecionado;
       // self.model["id"] = self.planoSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api
         .put("planos/" + self.model.id, { data: self.model })
         .then(() => {
@@ -380,6 +381,7 @@ export default {
     },
     editItem(item) {
       let self = this;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.editedIndex = self.planos.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;
