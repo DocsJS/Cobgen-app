@@ -639,8 +639,19 @@ export default {
   methods: {
     getSeguro() {
       let self = this;
+      const id = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify({
+        where: {
+          child_of: {
+            data: {
+              id: id,
+            },
+          },
+        },
+      });
       self.$api
-        .get("seguros")
+        .get(`seguros&populate=child_of&${query}`)
         .then(({ data }) => {
           self.seguro = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -660,7 +671,7 @@ export default {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["seguro"] = self.seguroSelecionado;
-
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api
         .post("seguros", {
           data: self.model,

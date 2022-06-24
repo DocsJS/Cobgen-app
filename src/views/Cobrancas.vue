@@ -409,8 +409,19 @@ export default {
   methods: {
     getCobrancas() {
       let self = this;
+      const id = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify({
+        where: {
+          child_of: {
+            data: {
+              id: id,
+            },
+          },
+        },
+      });
       self.$api
-        .get("cobrancas?populate=plano")
+        .get(`cobrancas?populate=plano&populate=child_of&${query}`)
         .then(({ data }) => {
           self.cobrancas = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -430,6 +441,7 @@ export default {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       self.model["plano"] = self.planoSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api.post("cobrancas", { data: self.model }).then(() => {
         setTimeout(() => {
           self.dialog = false;

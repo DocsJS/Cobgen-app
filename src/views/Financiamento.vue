@@ -1041,8 +1041,19 @@ export default {
   methods: {
     getFinanciamento() {
       let self = this;
+      const id = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify({
+        where: {
+          child_of: {
+            data: {
+              id: id,
+            },
+          },
+        },
+      });
       self.$api
-        .get("financiamentos?populate=documentos")
+        .get(`financiamentos?populate=documentos&populate=child_of&${query}`)
         .then(({ data }) => {
           self.financiamento = data.data.map((item) => {
             return { id: item.id, ...item.attributes };

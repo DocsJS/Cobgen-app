@@ -326,7 +326,7 @@ export default {
       let self = this;
       self.model["plano"] = self.planoSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
-
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api
         .post("clientes", {
           data: self.model,

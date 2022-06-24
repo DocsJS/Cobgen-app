@@ -320,8 +320,19 @@ export default {
   methods: {
     getPlanos() {
       let self = this;
+      const id = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify({
+        where: {
+          child_of: {
+            data: {
+              id: id,
+            },
+          },
+        },
+      });
       self.$api
-        .get("planos")
+        .get(`planos?populate=child_of&${query}`)
         .then(({ data }) => {
           self.planos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -341,6 +352,7 @@ export default {
       let self = this;
       // self.model["customer"] = self.clienteSelecionado;
       // self.model["id"] = self.planoSelecionado;
+      self.model["child_of"] = self.$store.state.app.user.id;
       self.$api.post("planos", { data: self.model }).then(() => {
         setTimeout(() => {
           self.dialog = false;
