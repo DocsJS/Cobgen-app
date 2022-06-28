@@ -20,10 +20,22 @@
       <v-spacer></v-spacer>
       <v-row>
         <v-col cols="12" sm="8">
-          <v-card class="mx-8 pa-6" flat>
-            <a href="https://clickwhats.com">
-              <v-img src="../assets/bannercobgen.png"></v-img>
-            </a>
+          <v-card flat>
+            <v-carousel
+              :show-arrows="false"
+              height="100%"
+              tile
+              cycle
+              hide-delimiter-background
+              delimiter-icon="mdi-minus"
+            >
+              <v-carousel-item
+                v-for="(item, i) in items"
+                :key="i"
+                :src="item.src"
+              >
+              </v-carousel-item>
+            </v-carousel>
           </v-card>
           <v-toolbar flat color="rgba(0,0,0,0)" dense class="mt-n1">
             <v-spacer></v-spacer>
@@ -133,21 +145,26 @@
     </v-container>
   </v-app>
 </template>
-
 <script>
 import SideBar from "../components/SideBar";
 export default {
   name: "Home",
   data: () => ({
     select: { state: "EN" },
-    items: ["EN", "ES", "DZ"],
+    // items: ["EN", "ES", "DZ"],
     text: "weekly",
-
+    items: [
+      {
+        src: " https://cdn.discordapp.com/attachments/855453874608930816/991431734426095676/bannercobgen.png",
+      },
+      {
+        src: "https://cdn.discordapp.com/attachments/855453874608930816/991431702851367042/bannercobgen2.png",
+      },
+    ],
     width: 2,
     radius: 10,
     padding: 8,
     lineCap: "round",
-
     fill: false,
     type: "trend",
     autoLineWidth: false,

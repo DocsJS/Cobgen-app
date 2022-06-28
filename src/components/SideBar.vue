@@ -102,9 +102,9 @@ export default {
     items: [
       { text: "Início", icon: "mdi-monitor-dashboard", to: "/" },
       { text: "Relatórios", icon: "mdi-chart-bar-stacked", to: "/relatorios" },
+      { text: "Clientes", icon: "mdi-account-group-outline", to: "/clientes" },
     ],
     items2: [
-      { text: "Clientes", icon: "mdi-account-group-outline", to: "/clientes" },
       { text: "Seguros", icon: "mdi-plus-outline", to: "/seguros" },
       {
         text: "Financiamentos",
