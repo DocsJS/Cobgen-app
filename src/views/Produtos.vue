@@ -370,6 +370,7 @@ export default {
       self.$api
         .post("planos", {
           data: {
+            numeroDeCobranca: self.model.numeroDeCobranca,
             nomePlano: self.model.nomePlano,
             codigoPlano: self.model.codigoPlano,
             nomeUnidade: self.model.nomeUnidade,
@@ -401,6 +402,7 @@ export default {
       self.$api
         .put("planos/" + self.model.id, {
           data: {
+            numeroDeCobranca: self.model.numeroDeCobranca,
             nomePlano: self.model.nomePlano,
             codigoPlano: self.model.codigoPlano,
             nomeUnidade: self.model.nomeUnidade,

@@ -107,27 +107,113 @@
                           solo
                           flat
                         ></v-text-field>
-                        <h5>CPF/CNPJ</h5>
-                        <v-text-field
-                          label="Selecione o seu cpf ou cnpj"
-                          v-model="model.cpfCnpj"
-                          outlined
-                          solo
-                          flat
-                          color="cyan"
-                        ></v-text-field>
                       </v-col>
                       <v-col>
-                        <h5>Endereço</h5>
+                        <h5 for="cpfInput">Informe um cpf valido:</h5>
                         <v-text-field
-                          label="Digite o seu endereço"
-                          v-model="model.postalCode"
+                          outlined
+                          id="cpfInput"
+                          type="text"
+                          placeholder="<enter> para validar"
+                          v-model="model.cpfCnpj"
+                          @input="pendente = true"
+                          @keyup.enter="verificarCpf"
+                        ></v-text-field>
+                        <v-btn
+                          @click="
+                            verificarCpf();
+                            loader = 'loading';
+                          "
+                          :loading="loading"
+                          :disabled="loading"
+                          color="cyan"
+                          outlined
+                          dark
+                          >validar</v-btn
+                        >
+                        <v-col
+                          v-show="!pendente"
+                          :style="messageType"
+                          class="msg"
+                        >
+                          <span v-if="valido"> CPF valido, parabéns </span>
+                          <span v-else>
+                            Este CPF não é valido, tente novamente!
+                          </span>
+                        </v-col>
+                      </v-col>
+
+                      <v-col>
+                        <h5>Data de nascimento</h5>
+                        <v-text-field
+                          label="Digite a data de nascimento"
+                          v-model="model.datadenascimento"
                           outlined
                           color="cyan"
                           solo
                           flat
                         ></v-text-field>
                       </v-col>
+
+                      <form @submit.prevent="save" novalidate="true">
+                        <v-col>
+                          <h5>Cep</h5>
+                          <v-text-field
+                            label="Para efetuar a busca de endereco digite o seu cep"
+                            outlined
+                            color="cyan"
+                            solo
+                            flat
+                            type="text"
+                            class="form-control"
+                            placeholder="cep"
+                            maxlength="8"
+                            v-model="cep"
+                          ></v-text-field>
+                          <ul class="list-group">
+                            <h3
+                              class="
+                                list-group-item
+                                active
+                                cyan--text
+                                text--lighten-1
+                              "
+                            >
+                              Dados do seu endereço:
+                            </h3>
+                            <li class="list-group-item">
+                              <span class="font-weight-bold">Logradouro :</span
+                              >{{ resultadoCEP.logradouro }}
+                            </li>
+
+                            <li class="list-group-item">
+                              <span class="font-weight-bold">Bairro : </span
+                              >{{ resultadoCEP.bairro }}
+                            </li>
+                            <li class="list-group-item">
+                              <span class="font-weight-bold">Localidade :</span
+                              >{{ resultadoCEP.localidade }}
+                            </li>
+                            <li class="list-group-item">
+                              <span class="font-weight-bold">Estado :</span
+                              >{{ resultadoCEP.uf }}
+                            </li>
+                          </ul>
+                        </v-col>
+                        <v-col>
+                          <h5>complemento</h5>
+                          <v-text-field
+                            label="Digite o complemento do seu endereço"
+                            outlined
+                            color="cyan"
+                            solo
+                            flat
+                            type="text"
+                            class="form-control"
+                            v-model="model.complement"
+                          ></v-text-field>
+                        </v-col>
+                      </form>
                     </v-col>
                   </v-tab-item>
                 </v-tabs>
@@ -202,6 +288,10 @@ export default {
     search: "",
     loader: null,
     loading: false,
+    cep: null,
+    resultadoCEP: "",
+    pendente: true,
+    valido: false,
     dialog: false,
     dialogDelete: false,
     adminType: ["true", "false"],
@@ -235,9 +325,9 @@ export default {
         value: "phone",
       },
       {
-        text: "Endereço",
+        text: "CEP",
         align: "center",
-        value: "postalCode",
+        value: "cep",
       },
       { text: "Ações", value: "actions", sortable: false },
     ],
@@ -251,7 +341,7 @@ export default {
       addressNumber: "",
       complement: "",
       province: "",
-      postalCode: "",
+      cep: "",
       externalReference: "",
       notification: "",
       additionalEmails: "",
@@ -259,6 +349,7 @@ export default {
       groupName: "",
       admin: "",
       plano: "",
+      datadenascimento: "",
     },
     defaultItem: {
       nome: "",
@@ -269,7 +360,7 @@ export default {
       addressNumber: "",
       complement: "",
       province: "",
-      postalCode: "",
+      cep: "",
       externalReference: "",
       notificationDisabled: "",
       additionalEmails: "",
@@ -277,6 +368,7 @@ export default {
       groupName: "",
       admin: "",
       plano: "",
+      datadenascimento: "",
     },
 
     subscriptions: [],
@@ -302,13 +394,29 @@ export default {
     newCliente() {
       return this.model && this.model.id && this.model.id > 0;
     },
+    messageType() {
+      return {
+        color: this.valido ? "green" : "red",
+      };
+    },
   },
   watch: {
+    // Interessante o cep que está no DATA seja o mesmo do método para fazer referência. Lembre toda propriedade que é função
+    cep(cepVemDoFormulario) {
+      // Vou limitar para apenas pesquisar depois que tiver 8 caracteres
+      if (cepVemDoFormulario.length === 8) {
+        fetch(`https://viacep.com.br/ws/${cepVemDoFormulario}/json`)
+          .then((r) => r.json())
+          .then((r) => {
+            this.resultadoCEP = r;
+          });
+      }
+    },
     loader() {
       const l = this.loader;
       this[l] = !this[l];
 
-      setTimeout(() => (this[l] = false), 3000);
+      setTimeout(() => (this[l] = false), 1000);
 
       this.loader = null;
     },
@@ -354,7 +462,7 @@ export default {
             addressNumber: self.model.addressNumber,
             complement: self.model.complement,
             province: self.model.province,
-            postalCode: self.model.postalCode,
+            cep: self.cep,
             externalReference: self.model.externalReference,
             notification: self.model.notification,
             child_of: child_of,
@@ -363,6 +471,7 @@ export default {
             groupName: self.model.groupName,
             admin: self.model.admin,
             plano: self.model.plano,
+            datadenascimento: self.model.datadenascimento,
           },
         })
         .then(() => {
@@ -389,10 +498,12 @@ export default {
             addressNumber: self.model.addressNumber,
             complement: self.model.complement,
             province: self.model.province,
-            postalCode: self.model.postalCode,
+            cep: self.cep,
             externalReference: self.model.externalReference,
             notification: self.model.notification,
             child_of: child_of,
+            plano: self.model.plano,
+            datadenascimento: self.model.datadenascimento,
           },
         })
         .then(() => {
@@ -495,7 +606,12 @@ export default {
           console.log(erro);
         });
     },
+    verificarCpf() {
+      this.valido = validar(this.model.cpfCnpj);
+      this.pendente = false;
+    },
   },
+
   mounted() {
     let self = this;
     console.log(self.$store.state.app.user.id);
@@ -509,6 +625,23 @@ export default {
     SideBar,
   },
 };
+const validar = (cpf) => checkAll(prepare(cpf));
+const notDig = (i) => ![".", "-", " "].includes(i);
+const prepare = (cpf) => cpf.trim().split("").filter(notDig).map(Number);
+const is11Len = (cpf) => cpf.length === 11;
+const notAllEquals = (cpf) => !cpf.every((i) => cpf[0] === i);
+const onlyNum = (cpf) => cpf.every((i) => !isNaN(i));
+
+const calcDig = (limit) => (a, i, idx) => a + i * (limit + 1 - idx);
+const somaDig = (cpf, limit) => cpf.slice(0, limit).reduce(calcDig(limit), 0);
+const resto11 = (somaDig) => 11 - (somaDig % 11);
+const zero1011 = (resto11) => ([10, 11].includes(resto11) ? 0 : resto11);
+
+const getDV = (cpf, limit) => zero1011(resto11(somaDig(cpf, limit)));
+const verDig = (pos) => (cpf) => getDV(cpf, pos) === cpf[pos];
+
+const checks = [is11Len, notAllEquals, onlyNum, verDig(9), verDig(10)];
+const checkAll = (cpf) => checks.map((f) => f(cpf)).every((r) => !!r);
 </script>
 <style>
 .custom-loader {
@@ -546,5 +679,25 @@ export default {
   to {
     transform: rotate(360deg);
   }
+}
+body {
+  font-family: "verdana";
+}
+h1 {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+hr {
+  margin-bottom: 15px;
+}
+.msg {
+  padding-top: 15px;
+}
+.referencia {
+  padding-bottom: 15px;
 }
 </style>

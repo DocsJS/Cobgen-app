@@ -94,12 +94,12 @@
                       <v-col>
                         <h5>Cliente</h5>
                         <v-select
-                          v-model="model.nome"
+                          v-model="clienteSelecionado"
                           offset-y
-                          item-value="nome"
+                          item-value="id"
                           item-text="nome"
                           :items="cliente"
-                          label="Selecione o tipo"
+                          label="Selecione o cliente"
                           outlined
                           solo
                           flat
@@ -114,7 +114,7 @@
                           item-value="id"
                           item-text="nomePlano"
                           :items="planos"
-                          label="Selecione o tipo"
+                          label="Selecione o plano"
                           outlined
                           solo
                           flat
@@ -470,7 +470,7 @@ export default {
         .post("cobrancas", {
           data: {
             cliente: self.model.cliente,
-            nomePlano: self.model.nomePlano,
+            plano: self.model.plano,
             cpfCnpj: self.model.cpfCnpj,
             email: self.model.email,
             phone: self.model.phone,
@@ -505,7 +505,7 @@ export default {
         .put("cobrancas/" + self.model.id, {
           data: {
             cliente: self.model.cliente,
-            nomePlano: self.model.nomePlano,
+            plano: self.model.plano,
             cpfCnpj: self.model.cpfCnpj,
             email: self.model.email,
             phone: self.model.phone,
