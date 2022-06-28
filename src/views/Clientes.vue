@@ -136,7 +136,15 @@
                   <v-btn color="red" text @click="dialog = false"
                     >Cancelar</v-btn
                   >
-                  <v-btn :disabled="loading" color="green" text @click="doSave"
+                  <v-btn
+                    color="green"
+                    text
+                    @click="
+                      doSave();
+                      loader = 'loading';
+                    "
+                    :loading="loading"
+                    :disabled="loading"
                     >Salvar</v-btn
                   >
                 </v-card-actions>
@@ -151,7 +159,17 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="red" text @click="closeDelete">Cancelar</v-btn>
-                <v-btn color="green" text @click="deleteItemConfirm">OK</v-btn>
+                <v-btn
+                  color="green"
+                  text
+                  @click="
+                    deleteItemConfirm();
+                    loader = 'loading';
+                  "
+                  :loading="loading"
+                  :disabled="loading"
+                  >OK</v-btn
+                >
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
@@ -182,6 +200,7 @@ import "vue-search-input/dist/styles.css";
 export default {
   data: () => ({
     search: "",
+    loader: null,
     loading: false,
     dialog: false,
     dialogDelete: false,
@@ -285,6 +304,14 @@ export default {
     },
   },
   watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+
+      setTimeout(() => (this[l] = false), 3000);
+
+      this.loader = null;
+    },
     dialog(val) {
       val || this.close();
     },
@@ -338,12 +365,10 @@ export default {
             plano: self.model.plano,
           },
         })
-        .then((res) => {
+        .then(() => {
           setTimeout(() => {
-            self.model.id = res.data.data.id;
             self.dialog = false;
-            self.save();
-            //self.getCliente();
+            self.getCliente();
           }, 1000);
           console.log(self.model["cliente"]);
         });
@@ -368,11 +393,6 @@ export default {
             externalReference: self.model.externalReference,
             notification: self.model.notification,
             child_of: child_of,
-            additionalEmails: self.model.additionalEmails,
-            observations: self.model.observations,
-            groupName: self.model.groupName,
-            admin: self.model.admin,
-            plano: self.model.plano,
           },
         })
         .then(() => {
@@ -490,3 +510,41 @@ export default {
   },
 };
 </script>
+<style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

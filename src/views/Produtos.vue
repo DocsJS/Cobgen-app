@@ -196,7 +196,15 @@
                   <v-btn color="red" text @click="dialog = false"
                     >Cancelar</v-btn
                   >
-                  <v-btn :disabled="loading" color="green" text @click="doSave"
+                  <v-btn
+                    :loading="loading"
+                    :disabled="loading"
+                    color="green"
+                    text
+                    @click="
+                      doSave();
+                      loader = 'loading';
+                    "
                     >Salvar</v-btn
                   >
                 </v-card-actions>
@@ -210,7 +218,15 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
-                  <v-btn color="green" text @click="deleteItemConfirm"
+                  <v-btn
+                    color="green"
+                    text
+                    @click="
+                      deleteItemConfirm();
+                      loader = 'loading';
+                    "
+                    :loading="loading"
+                    :disabled="loading"
                     >OK</v-btn
                   >
                   <v-spacer></v-spacer>
@@ -240,6 +256,7 @@ export default {
       search: "",
       dialog: false,
       dialogDelete: false,
+      loader: null,
       loading: false,
       cabranCada: ["Semana(s)", "Mês(s)", "Ano(s)"],
       headers: [
@@ -309,6 +326,14 @@ export default {
     },
   },
   watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+
+      setTimeout(() => (this[l] = false), 3000);
+
+      this.loader = null;
+    },
     dialog(val) {
       val || this.close();
     },
@@ -449,4 +474,41 @@ export default {
   },
 };
 </script>
- 
+ <style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

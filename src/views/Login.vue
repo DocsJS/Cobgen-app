@@ -62,7 +62,17 @@
                               >
                             </v-col>
                           </v-row>
-                          <v-btn color="cyan" dark block tile @click="dologin"
+                          <v-btn
+                            color="cyan"
+                            dark
+                            block
+                            tile
+                            :loading="loading"
+                            :disabled="loading"
+                            @click="
+                              dologin();
+                              loader = 'loading';
+                            "
                             >Entrar</v-btn
                           >
                           <h5 class="text-center grey--text mt-4 mb-3">
@@ -236,6 +246,8 @@ export default {
   data: () => ({
     show1: false,
     show2: false,
+    loader: null,
+    loading: false,
     model: {
       email: "",
       senha: "",
@@ -317,6 +329,16 @@ export default {
         });
     },
   },
+  watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+
+      setTimeout(() => (this[l] = false), 3000);
+
+      this.loader = null;
+    },
+  },
 };
 </script>
 <style scoped>
@@ -336,5 +358,41 @@ export default {
 }
 .v-application .rounded-br-xl {
   border-bottom-right-radius: 300px !important;
+}
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
