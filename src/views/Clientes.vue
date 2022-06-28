@@ -216,7 +216,7 @@ export default {
         value: "phone",
       },
       {
-        text: "CEP",
+        text: "Endereço",
         align: "center",
         value: "postalCode",
       },
@@ -317,7 +317,7 @@ export default {
       self.model["cliente"] = self.clienteSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .post("clientes", {
+        .post("clientes?populate=*", {
           data: {
             nome: self.model.nome,
             cpfCnpj: self.model.cpfCnpj,
@@ -338,10 +338,12 @@ export default {
             plano: self.model.plano,
           },
         })
-        .then(() => {
+        .then((res) => {
           setTimeout(() => {
+            self.model.id = res.data.data.id;
             self.dialog = false;
-            self.getCliente();
+            self.save();
+            //self.getCliente();
           }, 1000);
           console.log(self.model["cliente"]);
         });
@@ -352,7 +354,7 @@ export default {
       self.model["plano"] = self.planoSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("clientes/" + self.model.id, {
+        .put(`clientes/${self.model.id}?populate=child_of`, {
           data: {
             nome: self.model.nome,
             cpfCnpj: self.model.cpfCnpj,

@@ -79,7 +79,7 @@
                       ></v-switch>
                     </v-col>
                     <v-col>
-                      <h5>Título do Produto</h5>
+                      <h5>Título do Plano</h5>
                       <v-text-field
                         v-model="model.nomePlano"
                         outlined
@@ -101,7 +101,7 @@
                       ></v-text-field>
                     </v-col>
                     <v-col>
-                      <h5>Nome da Unidade</h5>
+                      <h5>Nome da únidade</h5>
                       <v-text-field
                         v-model="model.nomeUnidade"
                         outlined
