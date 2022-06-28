@@ -108,16 +108,22 @@
               </v-card>
               <v-col></v-col>
               <v-card flat>
-                <h4>Vendas por dispositivos</h4>
+                <h4>Cobranças por dispositivos</h4>
                 <h6 class="font-weight-light">
                   Dados refere-se aos últimos 7 dias
                 </h6>
               </v-card>
               <v-col></v-col>
               <v-card flat>
-                <h5>Vendas recentes</h5>
-                <v-btn class="ma-2" outlined color="blue" large>
-                  <h5>Ver todas as vendas</h5></v-btn
+                <h5>Cobranças recentes</h5>
+                <v-btn
+                  class="ma-2"
+                  outlined
+                  color="blue"
+                  large
+                  href="/cobrancas"
+                >
+                  <h5>Ver todas as cobranças</h5></v-btn
                 >
               </v-card>
             </v-card>
