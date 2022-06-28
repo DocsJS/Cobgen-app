@@ -21,9 +21,9 @@
       <v-row>
         <v-col cols="12" sm="8">
           <v-card class="mx-8 pa-6" flat>
-            <v-row>
+            <a href="https://clickwhats.com">
               <v-img src="../assets/bannercobgen.png"></v-img>
-            </v-row>
+            </a>
           </v-card>
           <v-toolbar flat color="rgba(0,0,0,0)" dense class="mt-n1">
             <v-spacer></v-spacer>
@@ -92,7 +92,7 @@
                   aos serviços bancários do Cobgen.
                 </h5>
               </body>
-              <v-btn small color="primary" dark>Verificar</v-btn>
+              <v-btn small color="primary" href="/conta" dark>Verificar</v-btn>
             </v-toolbar>
           </v-card>
           <v-col>
