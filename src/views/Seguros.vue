@@ -603,6 +603,25 @@ export default {
       trabalho2: "",
       estacionamento: "",
     },
+    editedIndex: -1,
+    editedItem: {
+      nome: "",
+      email: "",
+      estadocivil: "",
+      cep: "",
+      residencia: "",
+      portao: "",
+      condutor: "",
+      quantidade: "",
+      placa: "",
+      alarme: "",
+      modificacao: "",
+      financiado: "",
+      trabalho: "",
+      faculdade: "",
+      trabalho2: "",
+      estacionamento: "",
+    },
     defaultItem: {
       // tipodeseguro: "",
       nome: "",
@@ -629,6 +648,14 @@ export default {
     },
   },
   watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
+
+      setTimeout(() => (this[l] = false), 3000);
+
+      this.loader = null;
+    },
     dialog(val) {
       val || this.close();
     },
@@ -636,12 +663,12 @@ export default {
       val || this.closeDelete();
     },
   },
+  created() {},
   methods: {
     getSeguro() {
       let self = this;
-
       self.$api
-        .get(`seguros?populate=child_of`)
+        .get(`seguros?populate=clientes&populate=child_of`)
         .then(({ data }) => {
           self.seguro = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -660,10 +687,9 @@ export default {
     novoSeguro() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
-      self.model["seguro"] = self.seguroSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .post("seguros", {
+        .post("seguros?populate=*", {
           data: {
             nome: self.model.nome,
             email: self.model.email,
@@ -685,21 +711,19 @@ export default {
           },
         })
         .then(() => {
-          self.loading = true;
           setTimeout(() => {
-            self.loading = false;
             self.dialog = false;
             self.getSeguro();
           }, 1000);
+          console.log(self.model["seguro"]);
         });
     },
     save() {
       let self = this;
-      self.model["seguro"] = self.seguroSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("seguros/" + self.model.id, {
+        .put(`seguros/${self.model.id}?populate=child_of`, {
           data: {
             nome: self.model.nome,
             email: self.model.email,
@@ -745,14 +769,12 @@ export default {
     },
     deleteItemConfirm() {
       let self = this;
-      self.editedIndex = -1;
       self.$api.delete("seguros/" + self.model.id).then(() => {
         self.dialogDelete = false;
         self.model = Object.assign({}, self.defaultItem);
         self.getSeguro();
       });
     },
-
     close() {
       let self = this;
       self.dialog = false;
@@ -764,36 +786,12 @@ export default {
     closeDelete() {
       let self = this;
       self.dialogDelete = false;
-      self.$nextTick(() => {});
+      self.$nextTick(() => {
+        self.model = Object.assign({}, self.defaultItem);
+        self.editedIndex = -1;
+      });
     },
-    getPlanos() {
-      let self = this;
-      self.$api
-        .get("planos")
-        .then(({ data }) => {
-          self.planos = data.data.map((item) => {
-            return { id: item.id, ...item.attributes };
-          });
-          console.log(self.planos);
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
-    getAssinaturas() {
-      let self = this;
-      self.$api
-        .get("subscriptions")
-        .then(({ data }) => {
-          self.subscriptions = data.data.map((item) => {
-            return { id: item.id, ...item.attributes };
-          });
-          console.log(self.subscriptions);
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
+
     getCliente() {
       let self = this;
       self.$api
@@ -808,43 +806,11 @@ export default {
           console.log(erro);
         });
     },
-    getCobrancas() {
-      let self = this;
-      self.$api
-        .get("cobrancas")
-        .then(({ data }) => {
-          self.cobrancas = data.data.map((item) => {
-            return { id: item.id, ...item.attributes };
-          });
-          console.log(self.cobrancas);
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
-    // getVeiculos() {
-    //   let self = this;
-    //   self.$api
-    //     .get("veiculos")
-    //     .then(({ data }) => {
-    //       self.veiculos = data.data.map((item) => {
-    //         return { id: item.id, ...item.attributes };
-    //       });
-    //       console.log(self.veiculos);
-    //     })
-    //     .catch((erro) => {
-    //       console.log(erro);
-    //     });
-    // },
   },
   mounted() {
     let self = this;
     self.getSeguro();
     self.getCliente();
-    self.getPlanos();
-    self.getAssinaturas();
-    self.getCobrancas();
-    self.getVeiculos();
   },
   components: {
     SideBar,

@@ -1179,7 +1179,6 @@ export default {
       let self = this;
       self.model["financiamento"] = self.financiamentoSelecionado;
       self.model["cliente"] = self.clienteSelecionado;
-
       self.$api
         .put("financiamentos/" + self.finanID.id, {
           data: {
