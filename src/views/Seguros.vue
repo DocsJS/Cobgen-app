@@ -77,7 +77,18 @@
                       <v-col>
                         <h5>Email</h5>
                         <v-text-field
-                          label="Digite o seu email"
+                          label="Digite o email do cliente"
+                          v-model="model.additionalEmails"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email de consulta</h5>
+                        <v-text-field
+                          label="Digite o email a ser enviado os dados de cadastro"
                           v-model="model.email"
                           outlined
                           color="cyan"
@@ -555,11 +566,7 @@ export default {
         sortable: true,
         value: "nome",
       },
-      // {
-      //   text: "Tipo",
-      //   align: "center",
-      //   value: "tipodeseguro",
-      // },
+
       {
         text: "Email",
         align: "center",
@@ -585,7 +592,6 @@ export default {
     clienteSelecionado: null,
     seguro: [],
     model: {
-      // tipodeseguro: "",
       nome: "",
       email: "",
       estadocivil: "",
@@ -791,7 +797,6 @@ export default {
         self.editedIndex = -1;
       });
     },
-
     getCliente() {
       let self = this;
       self.$api

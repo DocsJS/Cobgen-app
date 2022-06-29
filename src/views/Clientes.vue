@@ -73,18 +73,22 @@
                       </v-col>
                       <v-col>
                         <h5>Selecione o plano desejado</h5>
-                        <v-select
-                          v-model="planoSelecionado"
-                          offset-y
-                          item-value="id"
-                          item-text="nomePlano"
-                          :items="planos"
-                          label="Selecione o tipo"
-                          outlined
-                          solo
-                          flat
-                          color="cyan"
-                        ></v-select>
+                        <v-flex>
+                          <v-autocomplete
+                            v-model="planoSelecionado"
+                            item-value="id"
+                            item-text="nomePlano"
+                            :items="planos"
+                            label="Selecione o tipo"
+                            outlined
+                            multiple
+                            chips
+                            solo
+                            flat
+                            color="cyan"
+                          >
+                          </v-autocomplete>
+                        </v-flex>
                       </v-col>
                       <v-col>
                         <h5>Email</h5>
