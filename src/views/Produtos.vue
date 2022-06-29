@@ -263,7 +263,7 @@ export default {
         {
           text: "Nome do Plano",
           align: "start",
-          sortable: false,
+
           value: "nomePlano",
         },
         { text: "Código do plano", value: "codigoPlano" },

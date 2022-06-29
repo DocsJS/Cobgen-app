@@ -81,6 +81,8 @@
                             :items="planos"
                             label="Selecione o tipo"
                             outlined
+                            pill
+                            filled
                             multiple
                             chips
                             solo
