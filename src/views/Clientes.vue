@@ -62,7 +62,6 @@
                         <h5>Nome</h5>
                         <v-text-field
                           v-model="model.nome"
-                          offset-y
                           item-value="nome"
                           label="Selecione o tipo"
                           outlined
@@ -79,10 +78,8 @@
                             item-value="id"
                             item-text="nomePlano"
                             :items="planos"
-                            label="Selecione o tipo"
+                            persistent-hint
                             outlined
-                            pill
-                            filled
                             multiple
                             chips
                             solo
@@ -294,6 +291,7 @@ export default {
     search: "",
     loader: null,
     loading: false,
+    isEditing: false,
     cep: null,
     resultadoCEP: "",
     pendente: true,
@@ -384,7 +382,8 @@ export default {
         nomePlano: "",
       },
     ],
-    planoSelecionado: null,
+    pCliente: null,
+    planoSelecionado: "",
     cobrancas: {
       cliente: "",
       billingType: "",
@@ -447,6 +446,20 @@ export default {
           console.log(erro);
         });
     },
+    getPlanocliente(item) {
+      let self = this;
+      self.model = Object.assign({}, item);
+      self.$api
+        .get("clientes/" + self.model.id + "?populate=plano")
+        .then((res) => {
+          self.planoedit = res.data.data.attributes.plano;
+          self.planoSelecionado = self.planoedit.data.attributes.nomePlano;
+          console.log(self.planoSelecionado);
+        })
+        .catch((erro) => {
+          console.log(erro);
+        });
+    },
     doSave() {
       let self = this;
       if (self.model && self.model.id && self.model.id > 0) self.save();
@@ -483,6 +496,9 @@ export default {
         .then(() => {
           setTimeout(() => {
             self.dialog = false;
+            self.model = self.defaultItem;
+            self.planoSelecionado = null;
+            self.cep = null;
             self.getCliente();
           }, 1000);
           console.log(self.model["cliente"]);
@@ -494,24 +510,27 @@ export default {
       self.model["plano"] = self.planoSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put(`clientes/${self.model.id}?populate=child_of`, {
-          data: {
-            nome: self.model.nome,
-            cpfCnpj: self.model.cpfCnpj,
-            email: self.model.email,
-            phone: self.model.phone,
-            address: self.model.address,
-            addressNumber: self.model.addressNumber,
-            complement: self.model.complement,
-            province: self.model.province,
-            cep: self.cep,
-            externalReference: self.model.externalReference,
-            notification: self.model.notification,
-            child_of: child_of,
-            plano: self.model.plano,
-            datadenascimento: self.model.datadenascimento,
-          },
-        })
+        .put(
+          `clientes/${self.model.id}?populate=child_of` + self.planoedit.id,
+          {
+            data: {
+              nome: self.model.nome,
+              cpfCnpj: self.model.cpfCnpj,
+              email: self.model.email,
+              phone: self.model.phone,
+              address: self.model.address,
+              addressNumber: self.model.addressNumber,
+              complement: self.model.complement,
+              province: self.model.province,
+              cep: self.cep,
+              externalReference: self.model.externalReference,
+              notification: self.model.notification,
+              child_of: child_of,
+              plano: self.model.plano,
+              datadenascimento: self.model.datadenascimento,
+            },
+          }
+        )
         .then(() => {
           if (self.editedIndex > -1)
             Object.assign(self.cliente[self.editedIndex], self.model.id);
@@ -526,6 +545,7 @@ export default {
     },
     editItem(item) {
       let self = this;
+      self.getPlanocliente(item);
       self.editedIndex = self.cliente.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;
@@ -567,7 +587,6 @@ export default {
           self.planos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.planos);
         })
         .catch((erro) => {
           console.log(erro);
@@ -599,19 +618,7 @@ export default {
           console.log(erro);
         });
     },
-    getVeiculos() {
-      let self = this;
-      self.$api
-        .get("veiculos")
-        .then(({ data }) => {
-          self.veiculos = data.data.map((item) => {
-            return { id: item.id, ...item.attributes };
-          });
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
+
     verificarCpf() {
       this.valido = validar(this.model.cpfCnpj);
       this.pendente = false;

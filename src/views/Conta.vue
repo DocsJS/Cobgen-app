@@ -46,7 +46,7 @@
                               >
                               </v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <!-- <v-col md="6">
                               <h5>Email</h5>
                               <v-text-field
                                 v-model="model.email"
@@ -58,7 +58,7 @@
                                 dense
                                 outlined
                               ></v-text-field>
-                            </v-col>
+                            </v-col> -->
                             <v-col md="6">
                               <h5>Telefone</h5>
                               <v-text-field

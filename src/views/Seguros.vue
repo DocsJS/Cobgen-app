@@ -61,7 +61,7 @@
                     <v-col>
                       <v-col>
                         <h5>Cliente</h5>
-                        <v-select
+                        <v-text-field
                           v-model="model.nome"
                           offset-y
                           item-value="nome"
@@ -72,7 +72,7 @@
                           solo
                           flat
                           color="cyan"
-                        ></v-select>
+                        ></v-text-field>
                       </v-col>
                       <v-col>
                         <h5>Email</h5>
@@ -285,7 +285,7 @@
                     <v-col>
                       <v-col>
                         <h5>Cliente</h5>
-                        <v-select
+                        <v-text-field
                           v-model="model.user"
                           offset-y
                           label="Selecione o cliente"
@@ -293,7 +293,29 @@
                           solo
                           flat
                           color="cyan"
-                        ></v-select>
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email</h5>
+                        <v-text-field
+                          label="Digite o email do cliente"
+                          v-model="model.additionalEmails"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email de consulta</h5>
+                        <v-text-field
+                          label="Digite o email a ser enviado os dados de cadastro"
+                          v-model="model.email"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
                       </v-col>
                       <v-col>
                         <h5>Quantidade de membros na familia</h5>
@@ -331,17 +353,6 @@
                         ></v-text-field>
                       </v-col>
                       <v-col>
-                        <h5>Email</h5>
-                        <v-text-field
-                          label="Digite o seu telefone"
-                          v-model="model.email"
-                          outlined
-                          color="cyan"
-                          solo
-                          flat
-                        ></v-text-field>
-                      </v-col>
-                      <v-col>
                         <h5>CEP</h5>
                         <v-text-field
                           label="Digite o seu cep"
@@ -358,7 +369,7 @@
                     <v-col>
                       <v-col>
                         <h5>Cliente</h5>
-                        <v-select
+                        <v-text-field
                           v-model="model.user"
                           offset-y
                           label="Selecione o cliente"
@@ -366,7 +377,29 @@
                           solo
                           flat
                           color="cyan"
-                        ></v-select>
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email</h5>
+                        <v-text-field
+                          label="Digite o email do cliente"
+                          v-model="model.additionalEmails"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email de consulta</h5>
+                        <v-text-field
+                          label="Digite o email a ser enviado os dados de cadastro"
+                          v-model="model.email"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
                       </v-col>
                       <v-col>
                         <h5>Quantidade de membros na familia</h5>
@@ -403,17 +436,7 @@
                           color="cyan"
                         ></v-text-field>
                       </v-col>
-                      <v-col>
-                        <h5>Email</h5>
-                        <v-text-field
-                          label="Digite o seu telefone"
-                          v-model="model.email"
-                          outlined
-                          color="cyan"
-                          solo
-                          flat
-                        ></v-text-field>
-                      </v-col>
+
                       <v-col>
                         <h5>CEP</h5>
                         <v-text-field
@@ -431,7 +454,7 @@
                     <v-col>
                       <v-col>
                         <h5>Cliente</h5>
-                        <v-select
+                        <v-text-field
                           v-model="model.user"
                           offset-y
                           label="Selecione o cliente"
@@ -439,7 +462,29 @@
                           solo
                           flat
                           color="cyan"
-                        ></v-select>
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email</h5>
+                        <v-text-field
+                          label="Digite o email do cliente"
+                          v-model="model.additionalEmails"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
+                      </v-col>
+                      <v-col>
+                        <h5>Email de consulta</h5>
+                        <v-text-field
+                          label="Digite o email a ser enviado os dados de cadastro"
+                          v-model="model.email"
+                          outlined
+                          color="cyan"
+                          solo
+                          flat
+                        ></v-text-field>
                       </v-col>
                       <v-col>
                         <h5>Quantidade de vidas</h5>
@@ -476,17 +521,7 @@
                           color="cyan"
                         ></v-text-field>
                       </v-col>
-                      <v-col>
-                        <h5>Email</h5>
-                        <v-text-field
-                          label="Digite o seu telefone"
-                          v-model="model.email"
-                          outlined
-                          color="cyan"
-                          solo
-                          flat
-                        ></v-text-field>
-                      </v-col>
+
                       <v-col>
                         <h5>CEP</h5>
                         <v-text-field
@@ -506,7 +541,15 @@
                   <v-btn color="red" text @click="dialog = false"
                     >Cancelar</v-btn
                   >
-                  <v-btn :disabled="loading" color="green" text @click="doSave"
+                  <v-btn
+                    color="green"
+                    text
+                    @click="
+                      doSave();
+                      loader = 'loading';
+                    "
+                    :loading="loading"
+                    :disabled="loading"
                     >Salvar</v-btn
                   >
                 </v-card-actions>
@@ -545,11 +588,12 @@ import "vue-search-input/dist/styles.css";
 export default {
   data: () => ({
     search: "",
+    loader: null,
     loading: false,
     dialog: false,
     dialogDelete: false,
     adminType: ["true", "false"],
-    estadocivil: ["Solteiro", "Namorando", "Casado"],
+    estadocivil: ["Solteiro", "Viúvo", "Casado", "Divorciado"],
     portao: ["Sim", "Não"],
     financiado: ["Sim", "Não"],
     trabalho: ["Sim", "Não"],
@@ -658,7 +702,7 @@ export default {
       const l = this.loader;
       this[l] = !this[l];
 
-      setTimeout(() => (this[l] = false), 3000);
+      setTimeout(() => (this[l] = false), 1000);
 
       this.loader = null;
     },
@@ -693,6 +737,7 @@ export default {
     novoSeguro() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
+      self.model["seguro"] = self.seguroSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
         .post("seguros?populate=*", {
@@ -822,4 +867,61 @@ export default {
   },
 };
 </script>
- 
+ <style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+body {
+  font-family: "verdana";
+}
+h1 {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+hr {
+  margin-bottom: 15px;
+}
+.msg {
+  padding-top: 15px;
+}
+.referencia {
+  padding-bottom: 15px;
+}
+</style>

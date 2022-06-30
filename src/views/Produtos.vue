@@ -56,27 +56,15 @@
                 <v-divider></v-divider>
                 <v-row>
                   <v-col>
-                    <v-col class="text-center">
-                      <img src="" width="130" />
-                    </v-col>
-                    <v-col>
-                      <v-file-input
-                        class="pa-3"
-                        label="Adicionar arquivo"
-                        outlined
-                        disabled
-                        color="cyan"
-                      ></v-file-input>
-                    </v-col>
-                  </v-col>
-                  <v-col>
                     <v-col>
                       <h5>Ativar/Desativar Cliente</h5>
                       <v-switch
+                        label="Ativar plano"
                         inset
                         v-model="model.Ativo"
                         color="cyan"
-                      ></v-switch>
+                      >
+                      </v-switch>
                     </v-col>
                     <v-col>
                       <h5>Título do Plano</h5>
@@ -243,6 +231,9 @@
             >mdi-delete</v-icon
           >
         </template>
+        <template v-slot:item.Ativo="{ item }">
+          {{ item.Ativo ? "Ativo" : "Inativo" }}
+        </template>
       </v-data-table>
     </v-col>
   </v-app>
@@ -263,7 +254,6 @@ export default {
         {
           text: "Nome do Plano",
           align: "start",
-
           value: "nomePlano",
         },
         { text: "Código do plano", value: "codigoPlano" },
@@ -301,7 +291,7 @@ export default {
         taxaDeConfiguracao: "",
         imposto: "",
         descricaoDoPlano: "",
-        ativo: "",
+        Ativo: "",
         permitirClientesAddComplemento: false,
       },
       defaultItem: {
@@ -315,7 +305,7 @@ export default {
         taxaDeConfiguracao: "",
         imposto: "",
         descricaoDoPlano: "",
-        ativo: "",
+        Ativo: "",
         permitirClientesAddComplemento: false,
       },
     };
