@@ -1,4 +1,4 @@
-<template>
+<template >
   <v-app id="inspire">
     <SideBar />
     <v-container>
@@ -73,12 +73,13 @@
                       <v-col>
                         <h5>Selecione o plano desejado</h5>
                         <v-flex>
-                          <v-autocomplete
-                            v-model="planoSelecionado"
+                          <v-select
                             item-value="id"
                             item-text="nomePlano"
+                            no-data-text
                             :items="planos"
-                            persistent-hint
+                            @change="onChange"
+                            v-model="model.planoSelecionado"
                             outlined
                             multiple
                             chips
@@ -86,7 +87,9 @@
                             flat
                             color="cyan"
                           >
-                          </v-autocomplete>
+                          </v-select>
+
+                          {{ model.planoSelecionado }}
                         </v-flex>
                       </v-col>
                       <v-col>
@@ -117,7 +120,6 @@
                           outlined
                           id="cpfInput"
                           type="text"
-                          placeholder="<enter> para validar"
                           v-model="model.cpfCnpj"
                           @input="pendente = true"
                           @keyup.enter="verificarCpf"
@@ -145,7 +147,6 @@
                           </span>
                         </v-col>
                       </v-col>
-
                       <v-col>
                         <h5>Data de nascimento</h5>
                         <v-text-field
@@ -157,7 +158,6 @@
                           flat
                         ></v-text-field>
                       </v-col>
-
                       <form @submit.prevent="save" novalidate="true">
                         <v-col>
                           <h5>Cep</h5>
@@ -171,7 +171,7 @@
                             class="form-control"
                             placeholder="cep"
                             maxlength="8"
-                            v-model="cep"
+                            v-model="model.cep"
                           ></v-text-field>
                           <ul class="list-group">
                             <h3
@@ -336,6 +336,7 @@ export default {
       { text: "Ações", value: "actions", sortable: false },
     ],
     cliente: [],
+    planoSelecionado: "",
     model: {
       nome: "",
       cpfCnpj: "",
@@ -345,7 +346,7 @@ export default {
       addressNumber: "",
       complement: "",
       province: "",
-      cep: "",
+      cep: null,
       externalReference: "",
       notification: "",
       additionalEmails: "",
@@ -354,6 +355,7 @@ export default {
       admin: "",
       plano: "",
       datadenascimento: "",
+      planoSelecionado: null,
     },
     defaultItem: {
       nome: "",
@@ -364,7 +366,7 @@ export default {
       addressNumber: "",
       complement: "",
       province: "",
-      cep: "",
+      cep: null,
       externalReference: "",
       notificationDisabled: "",
       additionalEmails: "",
@@ -373,8 +375,8 @@ export default {
       admin: "",
       plano: "",
       datadenascimento: "",
+      planoSelecionado: null,
     },
-
     subscriptions: [],
     clienteSelecionado: null,
     planos: [
@@ -382,8 +384,8 @@ export default {
         nomePlano: "",
       },
     ],
+
     pCliente: null,
-    planoSelecionado: "",
     cobrancas: {
       cliente: "",
       billingType: "",
@@ -433,6 +435,9 @@ export default {
     },
   },
   methods: {
+    onChange(event) {
+      console.log(event.target.value, this.planoSelecionado);
+    },
     getCliente() {
       let self = this;
       self.$api
@@ -453,8 +458,9 @@ export default {
         .get("clientes/" + self.model.id + "?populate=plano")
         .then((res) => {
           self.planoedit = res.data.data.attributes.plano;
-          self.planoSelecionado = self.planoedit.data.attributes.nomePlano;
-          console.log(self.planoSelecionado);
+          self.model.planoSelecionado =
+            self.data[0].attributes.plano.data.attributes.nomePlano;
+          console.log(self.model.model.planoSelecionado);
         })
         .catch((erro) => {
           console.log(erro);
@@ -467,8 +473,7 @@ export default {
     },
     novoCliente() {
       let self = this;
-      self.model["plano"] = self.planoSelecionado;
-      self.model["cliente"] = self.clienteSelecionado;
+      self.model["plano"] = self.model["cliente"] = self.clienteSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
         .post("clientes?populate=*", {
@@ -481,7 +486,7 @@ export default {
             addressNumber: self.model.addressNumber,
             complement: self.model.complement,
             province: self.model.province,
-            cep: self.cep,
+            cep: self.model.cep,
             externalReference: self.model.externalReference,
             notification: self.model.notification,
             child_of: child_of,
@@ -490,6 +495,8 @@ export default {
             groupName: self.model.groupName,
             admin: self.model.admin,
             plano: self.model.plano,
+            nomePlano: self.nomePlano,
+            planoSelecionado: self.model.planoSelecionado,
             datadenascimento: self.model.datadenascimento,
           },
         })
@@ -497,7 +504,7 @@ export default {
           setTimeout(() => {
             self.dialog = false;
             self.model = self.defaultItem;
-            self.planoSelecionado = null;
+            self.model.planoSelecionado = null;
             self.cep = null;
             self.getCliente();
           }, 1000);
@@ -507,30 +514,29 @@ export default {
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
-      self.model["plano"] = self.planoSelecionado;
+      self.model["plano"] = self.model.planoSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put(
-          `clientes/${self.model.id}?populate=child_of` + self.planoedit.id,
-          {
-            data: {
-              nome: self.model.nome,
-              cpfCnpj: self.model.cpfCnpj,
-              email: self.model.email,
-              phone: self.model.phone,
-              address: self.model.address,
-              addressNumber: self.model.addressNumber,
-              complement: self.model.complement,
-              province: self.model.province,
-              cep: self.cep,
-              externalReference: self.model.externalReference,
-              notification: self.model.notification,
-              child_of: child_of,
-              plano: self.model.plano,
-              datadenascimento: self.model.datadenascimento,
-            },
-          }
-        )
+        .put(`clientes/${self.model.id}?populate=child_of` + self.plano, {
+          data: {
+            nome: self.model.nome,
+            cpfCnpj: self.model.cpfCnpj,
+            email: self.model.email,
+            phone: self.model.phone,
+            address: self.model.address,
+            addressNumber: self.model.addressNumber,
+            complement: self.model.complement,
+            province: self.model.province,
+            cep: self.model.cep,
+            externalReference: self.model.externalReference,
+            notification: self.model.notification,
+            child_of: child_of,
+            plano: self.model.plano,
+            nomePlano: self.nomePlano,
+            planoSelecionado: self.model.planoSelecionado,
+            datadenascimento: self.model.datadenascimento,
+          },
+        })
         .then(() => {
           if (self.editedIndex > -1)
             Object.assign(self.cliente[self.editedIndex], self.model.id);
@@ -545,7 +551,6 @@ export default {
     },
     editItem(item) {
       let self = this;
-      self.getPlanocliente(item);
       self.editedIndex = self.cliente.indexOf((i) => i.id === item.id);
       self.model = Object.assign({}, item);
       self.dialog = true;
@@ -624,7 +629,6 @@ export default {
       this.pendente = false;
     },
   },
-
   mounted() {
     let self = this;
     console.log(self.$store.state.app.user.id);

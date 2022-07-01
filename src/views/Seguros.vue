@@ -279,6 +279,28 @@
                           flat
                         ></v-select>
                       </v-col>
+                      <!-- <form ref="form">
+                        <v-row>
+                          <v-col cols="12" md="2">
+                            <v-file-input
+                              color="cyan"
+                              ref="file"
+                              id="file"
+                              @click="chooseFiles"
+                              @change="handleFileUpload"
+                              name="files"
+                              type="file"
+                              offset-y
+                              v-model="arquivo"
+                              chips
+                              label="Enviar os documentos referente ao veiculo e pessoa"
+                            >
+                            </v-file-input>
+                            {{ arquivoname }}
+                            <v-img :src="url ? url : arquivo"></v-img>
+                          </v-col>
+                        </v-row>
+                      </form> -->
                     </v-col>
                   </v-tab-item>
                   <v-tab-item>
@@ -603,6 +625,15 @@ export default {
     condutor: ["Sim", "Não"],
     alarme: ["Sim", "Não"],
     notifications: ["true", "false"],
+    documentos: [
+      {
+        name: "",
+      },
+    ],
+    name: null,
+    url: null,
+    arquivo: null,
+    arquivoname: null,
     headers: [
       {
         text: "Nome",
@@ -729,6 +760,30 @@ export default {
           console.log(erro);
         });
     },
+    getDocumento(item) {
+      let self = this;
+      self.model = Object.assign({}, item);
+      self.$api
+        .get("seguros/" + self.model.id + "?populate=documentos")
+        .then((res) => {
+          self.segID = res.data.data;
+          self.arquivo =
+            self.segID.attributes.documentos.data[0].attributes.url;
+          self.arquivoname =
+            self.segID.attributes.documentos.data[0].attributes.name;
+          console.log(self.arquivo);
+        })
+        .catch((erro) => {
+          console.log(erro);
+        });
+    },
+    // chooseFiles: function () {
+    //   document.getElementById("file");
+    // },
+    // handleFileUpload() {
+    //   let self = this;
+    //   self.url = URL.createObjectURL(self.arquivo);
+    // },
     doSave() {
       let self = this;
       if (self.model && self.model.id && self.model.id > 0) self.save();
@@ -739,28 +794,37 @@ export default {
       self.model["cliente"] = self.clienteSelecionado;
       self.model["seguro"] = self.seguroSelecionado;
       const child_of = self.$store.state.app.user.id;
+      // let form = self.$refs.form;
       self.$api
-        .post("seguros?populate=*", {
-          data: {
-            nome: self.model.nome,
-            email: self.model.email,
-            estadocivil: self.model.estadocivil,
-            cep: self.model.cep,
-            residencia: self.model.residencia,
-            portao: self.model.portao,
-            condutor: self.model.condutor,
-            quantidade: self.model.quantidade,
-            placa: self.model.placa,
-            alarme: self.model.alarme,
-            modificacao: self.model.modificacao,
-            financiado: self.model.financiado,
-            trabalho: self.model.trabalho,
-            faculdade: self.model.faculdade,
-            trabalho2: self.model.trabalho2,
-            estacionamento: self.model.estacionamento,
-            child_of: child_of,
-          },
+        // .post("upload", new FormData(form))
+        .then(() => {
+          // self.documentos = res.data[0];
+          // console.log(self.documentos.id);
+          self.$api.post("seguros/email", {
+            data: {
+              nome: self.model.nome,
+              email: self.model.email,
+              additionalEmails: self.model.additionalEmails,
+              estadocivil: self.model.estadocivil,
+              cep: self.model.cep,
+              residencia: self.model.residencia,
+              portao: self.model.portao,
+              condutor: self.model.condutor,
+              quantidade: self.model.quantidade,
+              placa: self.model.placa,
+              alarme: self.model.alarme,
+              modificacao: self.model.modificacao,
+              financiado: self.model.financiado,
+              trabalho: self.model.trabalho,
+              faculdade: self.model.faculdade,
+              trabalho2: self.model.trabalho2,
+              estacionamento: self.model.estacionamento,
+              child_of: child_of,
+              documentos: self.documentos,
+            },
+          });
         })
+
         .then(() => {
           setTimeout(() => {
             self.dialog = false;
@@ -769,15 +833,17 @@ export default {
           console.log(self.model["seguro"]);
         });
     },
+
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put(`seguros/${self.model.id}?populate=child_of`, {
+        .put(`seguros/${self.model.id}?populate=child_of`, +self.segID, {
           data: {
             nome: self.model.nome,
             email: self.model.email,
+            additionalEmails: self.model.additionalEmails,
             estadocivil: self.model.estadocivil,
             cep: self.model.cep,
             residencia: self.model.residencia,
@@ -793,6 +859,7 @@ export default {
             trabalho2: self.model.trabalho2,
             estacionamento: self.model.estacionamento,
             child_of: child_of,
+            documentos: self.documentos,
           },
         })
         .then(() => {

@@ -752,26 +752,9 @@
                           solo
                           flat
                         ></v-text-field>
-
                         <form ref="form">
                           <v-row>
                             <v-col cols="12" md="2">
-                              <!-- <v-file-input
-                                color="cyan"
-                                ref="file"
-                                id="file"
-                                @click="chooseFiles"
-                                @change="handleFileUpload"
-                                name="files"
-                                type="file"
-                                offset-y
-                                v-model="arquivo"
-                                chips
-                                multiple
-                                label="Enviar os documentos referente ao veiculo e pessoa"
-                              >
-                              </v-file-input> -->
-
                               <v-file-input
                                 color="cyan"
                                 ref="file"
