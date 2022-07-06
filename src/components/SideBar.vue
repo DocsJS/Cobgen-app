@@ -5,13 +5,13 @@
     permanent
     expand-on-hover
     mini-variant
-    mini-variant-width="100"
+    mini-variant-width="70"
     :class="`elevation-${hover ? 24 : 3}`"
   >
     <v-list-item-avatar
       class="d-block text-center mx-auto mt-4"
       color=""
-      size="90"
+      size="70"
     >
       <v-img src="../assets/cobgen.png"></v-img>
     </v-list-item-avatar>

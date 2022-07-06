@@ -223,7 +223,7 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)" color="primary"
             >mdi-pencil</v-icon
           >
@@ -231,7 +231,7 @@
             >mdi-delete</v-icon
           >
         </template>
-        <template v-slot:item.Ativo="{ item }">
+        <template v-slot:[`item.Ativo`]="{ item }">
           {{ item.Ativo ? "Ativo" : "Inativo" }}
         </template>
       </v-data-table>

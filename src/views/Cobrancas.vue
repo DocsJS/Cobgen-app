@@ -15,7 +15,7 @@
       </v-app-bar>
       <v-spacer></v-spacer>
       <v-row>
-        <v-col cols="12" sm="15">
+        <v-col cols="12" sm="20">
           <v-card class="rounded pa-8" color="blue lighten-4" outlined>
             <h4 class="text-center">Total de total Vendas</h4>
           </v-card>
@@ -215,7 +215,7 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-icon small class="mr-2" @click="editItem(item)" color="primary"
             >mdi-pencil</v-icon
           >
@@ -223,7 +223,7 @@
             >mdi-delete</v-icon
           >
         </template>
-        <template v-slot:item.plano="{ item }">
+        <template v-slot:[`item.plano`]="{ item }">
           {{
             item.plano && item.plano.data && item.plano.data.attributes
               ? item.plano.data.attributes.nomePlano
@@ -570,7 +570,6 @@ export default {
         self.editedIndex = -1;
       });
     },
-
     getCliente() {
       let self = this;
       self.$api

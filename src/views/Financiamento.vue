@@ -804,7 +804,7 @@
             </v-card>
           </v-dialog>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-icon small class="mr-2" color="primary" @click="editItem(item)"
             >mdi-pencil</v-icon
           >

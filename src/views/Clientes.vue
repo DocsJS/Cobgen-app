@@ -73,7 +73,7 @@
                       <v-col>
                         <h5>Selecione o plano desejado</h5>
                         <v-flex>
-                          <v-select
+                          <v-autocomplete
                             item-value="id"
                             item-text="nomePlano"
                             no-data-text
@@ -87,7 +87,7 @@
                             flat
                             color="cyan"
                           >
-                          </v-select>
+                          </v-autocomplete>
 
                           {{ model.planoSelecionado }}
                         </v-flex>
@@ -106,12 +106,16 @@
                       <v-col>
                         <h5>Telefone</h5>
                         <v-text-field
-                          label="Digite o seu telefone"
                           v-model="model.phone"
-                          outlined
+                          type="text"
+                          @input="acceptNumber"
+                          label="Digite o número de contato"
                           color="cyan"
                           solo
                           flat
+                          required
+                          dense
+                          outlined
                         ></v-text-field>
                       </v-col>
                       <v-col>
@@ -264,7 +268,7 @@
             </v-card>
           </v-dialog>
         </template>
-        <template v-slot:item.actions="{ item }">
+        <template v-slot:[`item.actions`]="{ item }">
           <v-icon small class="mr-2" color="primary" @click="editItem(item)"
             >mdi-pencil</v-icon
           >
@@ -272,7 +276,7 @@
             >mdi-delete</v-icon
           >
         </template>
-        <template v-slot:item.plano="{ item }">
+        <template v-slot:[`item.plano`]="{ item }">
           {{
             item.plano && item.plano.data && item.plano.data.attributes
               ? item.plano.data.attributes.nomePlano
@@ -435,6 +439,14 @@ export default {
     },
   },
   methods: {
+    acceptNumber() {
+      var x = this.model.phone
+        .replace(/\D/g, "")
+        .match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
+      this.model.phone = !x[2]
+        ? x[1]
+        : "(" + x[1] + ") " + x[2] + (x[3] ? "-" + x[3] : "");
+    },
     onChange(event) {
       console.log(event.target.value, this.planoSelecionado);
     },
