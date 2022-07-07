@@ -6,7 +6,7 @@
     expand-on-hover
     mini-variant
     mini-variant-width="70"
-    :class="`elevation-${hover ? 24 : 3}`"
+    class="elevation-0"
   >
     <v-list-item-avatar
       class="d-block text-center mx-auto mt-4"
@@ -18,7 +18,7 @@
 
     <v-list nav dense>
       <v-list-item-group v-model="selectedItem">
-        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to">
+        <v-list-item v-for="(item, i) in items" :key="`vendas-root-${i}`" :to="item.to">
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
@@ -33,7 +33,7 @@
           <template v-slot:activator>
             <v-list-item-title>Vendas</v-list-item-title>
           </template>
-          <v-list-item v-for="(item, i) in items3" :key="i" :to="item.to">
+          <v-list-item v-for="(item, i) in items3" :key="`vendas-item-${i}`" :to="item.to">
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -49,7 +49,7 @@
           <template v-slot:activator>
             <v-list-item-title>Ver mais</v-list-item-title>
           </template>
-          <v-list-item v-for="(item, i) in items2" :key="i" :to="item.to">
+          <v-list-item v-for="(item, i) in items2" :key="`see-more-root-${i}`" :to="item.to">
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -58,7 +58,7 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item v-for="(item, i) in items4" :key="i" :to="item.to">
+        <v-list-item v-for="(item, i) in items4" :key="`see-more-item-${i}`" :to="item.to">
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
