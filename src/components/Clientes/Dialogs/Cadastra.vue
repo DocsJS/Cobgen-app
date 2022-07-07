@@ -215,6 +215,26 @@
   const checks = [is11Len, notAllEquals, onlyNum, verDig(9), verDig(10)];
   const checkAll = (cpf) => checks.map((f) => f(cpf)).every((r) => !!r);
 
+  const defaultItem = {
+    nome: "",
+    cpfCnpj: "",
+    email: "",
+    phone: "",
+    address: "",
+    addressNumber: "",
+    complement: "",
+    province: "",
+    cep: null,
+    externalReference: "",
+    notificationDisabled: "",
+    additionalEmails: "",
+    observations: "",
+    groupName: "",
+    admin: "",
+    datadenascimento: "",
+    plano: null,
+  };
+
   export default {
     data() {
       return {
@@ -243,25 +263,7 @@
           plano: null,
           datadenascimento: "",
         },
-        defaultItem: {
-          nome: "",
-          cpfCnpj: "",
-          email: "",
-          phone: "",
-          address: "",
-          addressNumber: "",
-          complement: "",
-          province: "",
-          cep: null,
-          externalReference: "",
-          notificationDisabled: "",
-          additionalEmails: "",
-          observations: "",
-          groupName: "",
-          admin: "",
-          datadenascimento: "",
-          plano: null,
-        },
+
         planos: [
           {
             nomePlano: "",
@@ -355,7 +357,7 @@
           .then(() => {
             setTimeout(() => {
               self.dialog = false;
-              self.model = self.defaultItem;
+              self.model = {};
               self.planoSelecionado = null;
               self.cep = null;
             }, 1000);
@@ -442,7 +444,8 @@
           this.model = model;
           this.planoSelecionado = model.plano.data.id;
         } else {
-          this.model = this.defaultItem;
+          this.model = null;
+          this.model = { ...defaultItem };
           this.planoSelecionado = null;
         }
 

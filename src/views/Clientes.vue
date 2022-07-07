@@ -260,12 +260,8 @@
       },
     },
     mounted() {
-      let self = this;
-      console.log(self.$store.state.app.user.id);
-      self.getCliente();
-      // self.getPlanos();
-      // self.getAssinaturas();
-      // self.getCobrancas();
+      console.log(this.$store.state.app.user.id);
+      this.getCliente();
     },
   };
 </script>
