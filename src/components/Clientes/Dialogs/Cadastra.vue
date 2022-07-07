@@ -24,13 +24,10 @@
                   <v-autocomplete
                     item-value="id"
                     item-text="nomePlano"
-                    no-data-text
                     :items="planos"
                     :filter="customFilter"
-                    @change="onChange"
-                    v-model="model.planoSelecionado"
+                    v-model="planoSelecionado"
                     outlined
-                    multiple
                     chips
                     solo
                     flat
@@ -53,8 +50,6 @@
                       </v-list-item-content>
                     </template>
                   </v-autocomplete>
-
-                  {{ model.planoSelecionado }}
                 </v-flex>
               </v-col>
               <v-col>
@@ -88,26 +83,17 @@
                 <v-text-field
                   outlined
                   id="cpfInput"
-                  type="text"
+                  type="number"
                   v-model="model.cpfCnpj"
+                  @change="verificarCpf"
                   @input="pendente = true"
                   @keyup.enter="verificarCpf"
+                  @keyup="verificarCpf"
                 ></v-text-field>
-                <v-btn
-                  @click="
-                    verificarCpf();
-                    loader = 'loading';
-                  "
-                  :loading="loading"
-                  :disabled="loading"
-                  color="cyan"
-                  outlined
-                  dark
-                  >validar</v-btn
-                >
+
                 <v-col v-show="!pendente" :style="messageType" class="msg">
-                  <span v-if="valido"> CPF valido, parabéns </span>
-                  <span v-else> Este CPF não é valido, tente novamente! </span>
+                  <span v-if="valido"> CPF Válido, parabéns! </span>
+                  <span v-else>CPF inválido... </span>
                 </v-col>
               </v-col>
               <v-col>
@@ -118,6 +104,7 @@
                   outlined
                   color="cyan"
                   solo
+                  type="date"
                   flat
                 ></v-text-field>
               </v-col>
@@ -232,6 +219,7 @@
     data() {
       return {
         dialog: false,
+        planoSelecionado: null,
         loading: false,
         resultadoCEP: null,
         pendente: true,
@@ -252,9 +240,8 @@
           observations: "",
           groupName: "",
           admin: "",
-          plano: "",
+          plano: null,
           datadenascimento: "",
-          planoSelecionado: null,
         },
         defaultItem: {
           nome: "",
@@ -272,9 +259,8 @@
           observations: "",
           groupName: "",
           admin: "",
-          plano: "",
           datadenascimento: "",
-          planoSelecionado: null,
+          plano: null,
         },
         planos: [
           {
@@ -341,7 +327,6 @@
       },
       novoCliente() {
         let self = this;
-        self.model["plano"] = self.model["cliente"] = self.clienteSelecionado;
         const child_of = self.$store.state.app.user.id;
         self.$api
           .post("clientes?populate=*", {
@@ -362,9 +347,8 @@
               observations: self.model.observations,
               groupName: self.model.groupName,
               admin: self.model.admin,
-              plano: self.model.plano,
+              plano: self.planoSelecionado,
               nomePlano: self.nomePlano,
-              planoSelecionado: self.model.planoSelecionado,
               datadenascimento: self.model.datadenascimento,
             },
           })
@@ -372,16 +356,14 @@
             setTimeout(() => {
               self.dialog = false;
               self.model = self.defaultItem;
-              self.model.planoSelecionado = null;
+              self.planoSelecionado = null;
               self.cep = null;
-              self.getCliente();
             }, 1000);
           });
       },
       save() {
         let self = this;
-        self.model["cliente"] = self.clienteSelecionado;
-        self.model["plano"] = self.model.planoSelecionado;
+        self.loading = true;
         const child_of = self.$store.state.app.user.id;
         self.$api
           .put(`clientes/${self.model.id}?populate=child_of` + self.plano, {
@@ -398,30 +380,20 @@
               externalReference: self.model.externalReference,
               notification: self.model.notification,
               child_of: child_of,
-              plano: self.model.plano,
               nomePlano: self.nomePlano,
-              planoSelecionado: self.model.planoSelecionado,
+              plano: self.planoSelecionado,
               datadenascimento: self.model.datadenascimento,
             },
           })
           .then(() => {
-            if (self.editedIndex > -1)
-              Object.assign(self.cliente[self.editedIndex], self.model.id);
-            else self.cliente.push(self.model);
-            self.loading = true;
             setTimeout(() => {
               self.loading = false;
               self.dialog = false;
-              self.getCliente();
+              self.close();
             }, 1000);
           });
       },
-      editItem(item) {
-        let self = this;
-        self.editedIndex = self.cliente.indexOf((i) => i.id === item.id);
-        self.model = Object.assign({}, item);
-        self.dialog = true;
-      },
+
       getPlanos() {
         let self = this;
         self.$api
@@ -461,20 +433,25 @@
             console.log(erro);
           });
       },
-      onChange(event) {
-        console.log(event.target.value, this.planoSelecionado);
-      },
       verificarCpf() {
         this.valido = validar(this.model.cpfCnpj);
         this.pendente = false;
       },
+      open(model = null) {
+        if (model) {
+          this.model = model;
+          this.planoSelecionado = model.plano.data.id;
+        } else {
+          this.model = this.defaultItem;
+          this.planoSelecionado = null;
+        }
+
+        this.dialog = true;
+        this.$emit("opened");
+      },
       close() {
-        let self = this;
-        self.dialog = false;
-        self.$nextTick(() => {
-          self.model = Object.assign({}, self.defaultItem);
-          self.editedIndex = -1;
-        });
+        this.dialog = false;
+        this.$emit("closed");
       },
     },
     computed: {

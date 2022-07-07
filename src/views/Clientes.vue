@@ -8,7 +8,7 @@
         </div>
         <v-spacer></v-spacer>
         <v-btn color="#30c3cf" dark large @click="openCadastroDialog">
-          <h5>Cadastrar cliente</h5>
+          <h5>Cadastrar cliente A</h5>
         </v-btn>
         <v-btn icon>
           <v-icon color="black">mdi-help-circle-outline</v-icon>
@@ -60,7 +60,7 @@
           }}
         </template>
       </v-data-table>
-      <Cadastra ref="cadastra-dialog" />
+      <Cadastra ref="cadastra-dialog" @closed="getCliente()" />
       <v-dialog v-model="dialogDelete" max-width="520px">
         <v-card>
           <v-card-title class="text-h5"
@@ -91,6 +91,7 @@
   import SideBar from "../components/SideBar";
   import "vue-search-input/dist/styles.css";
   import Cadastra from "../components/Clientes/Dialogs/Cadastra.vue";
+
   export default {
     components: {
       SideBar,
@@ -198,7 +199,7 @@
 
     methods: {
       openCadastroDialog() {
-        this.$refs["cadastra-dialog"].dialog = true;
+        this.$refs["cadastra-dialog"].open(false);
       },
 
       getCliente() {
@@ -214,6 +215,7 @@
             console.log(erro);
           });
       },
+
       getPlanocliente(item) {
         let self = this;
         self.model = Object.assign({}, item);
@@ -242,6 +244,10 @@
           self.model = Object.assign({}, self.defaultItem);
           self.getCliente();
         });
+      },
+
+      editItem(item) {
+        this.$refs["cadastra-dialog"].open(Object.assign({}, item));
       },
 
       closeDelete() {
