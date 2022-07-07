@@ -362,6 +362,7 @@
                                 flat
                                 outlined
                                 color="cyan"
+                                type="number"
                                 v-model="model.Numero"
                                 label="Digite o número da sua residência"
                                 required
@@ -456,6 +457,7 @@
                                 dense
                                 solo
                                 flat
+                                type="number"
                                 outlined
                                 color="cyan"
                                 label="(sem o dígito)"
@@ -470,6 +472,7 @@
                                 solo
                                 flat
                                 outlined
+                                type="number"
                                 color="cyan"
                                 label="(sem o dígito)"
                                 v-model="model.Conta"
@@ -481,6 +484,7 @@
                               <v-text-field
                                 dense
                                 solo
+                                type="number"
                                 flat
                                 outlined
                                 color="cyan"
