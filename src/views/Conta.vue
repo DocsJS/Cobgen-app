@@ -60,7 +60,7 @@
                                 v-model="model.celular"
                                 type="text"
                                 @input="acceptNumber"
-                                label="Digite o seu número de contato"
+                                label="Digite o número de contato"
                                 color="cyan"
                                 solo
                                 flat
@@ -102,6 +102,7 @@
                                 solo
                                 flat
                                 outlined
+                                type="date"
                                 color="cyan"
                                 v-model="model.datadenascimento"
                                 label="Digite a data de nascimento"
@@ -151,6 +152,7 @@
                                 solo
                                 flat
                                 outlined
+                                type="number"
                                 color="cyan"
                                 v-model="model.Numero"
                                 label="Digite o número da sua residência"

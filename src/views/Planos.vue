@@ -123,6 +123,7 @@
                     v-model="model.taxaDeConfiguracao"
                     outlined
                     label="Insira a taxa de configuração"
+                    type="number"
                     persistent-hint
                     solo
                     flat
@@ -131,6 +132,7 @@
                   <h5>Imposto</h5>
                   <v-text-field
                     v-model="model.imposto"
+                    type="number"
                     outlined
                     label="Insira o imposto"
                     persistent-hint
@@ -242,273 +244,273 @@
   </v-app>
 </template>
 <script>
-  import SideBar from "../components/SideBar";
-  import "vue-search-input/dist/styles.css";
-  export default {
-    data() {
-      return {
-        search: "",
-        dialog: false,
-        dialogDelete: false,
-        loader: null,
-        loading: false,
-        cabranCada: ["Semana(s)", "Mês(s)", "Ano(s)"],
-        headers: [
-          {
-            text: "Nome do Plano",
-            align: "start",
-            value: "nomePlano",
-          },
-          { text: "Código do plano", value: "codigoPlano" },
-          { text: "Nome da unidade", value: "nomeUnidade" },
-          { text: "Preço", value: "preco" },
-          { text: "Cobrar a cada", value: "cobrancaACada" },
-          { text: "Ciclos de cobrança", value: "numeroDeCobranca" },
-          { text: "Ativo", value: "ativo" },
-          { text: "Ações", value: "actions", sortable: false },
-        ],
-        planos: [],
-        model: {
-          nomePlano: "",
-          codigoPlano: "",
-          nomeUnidade: "",
-          preco: "",
-          cobrancaACada: "",
-          numeroDeVezesDeCobranca: "",
-          avaliacaoGratuita: "",
-          taxaDeConfiguracao: "",
-          imposto: "",
-          descricaoDoPlano: "",
-          ativo: true,
-          permitirClientesAddComplemento: false,
-          fields: [],
+import SideBar from "../components/SideBar";
+import "vue-search-input/dist/styles.css";
+export default {
+  data() {
+    return {
+      search: "",
+      dialog: false,
+      dialogDelete: false,
+      loader: null,
+      loading: false,
+      cabranCada: ["Semana(s)", "Mês(s)", "Ano(s)"],
+      headers: [
+        {
+          text: "Nome do Plano",
+          align: "start",
+          value: "nomePlano",
         },
-        editedIndex: -1,
-        editedItem: {
-          nomePlano: "",
-          codigoPlano: "",
-          nomeUnidade: "",
-          preco: "",
-          cobrarACada: "",
-          numeroDeCobranca: "",
-          avaliacaoGratuita: "",
-          taxaDeConfiguracao: "",
-          imposto: "",
-          descricaoDoPlano: "",
-          ativo: true,
-          permitirClientesAddComplemento: false,
-          fields: [],
-        },
-        defaultItem: {
-          nomePlano: "",
-          codigoPlano: "",
-          nomeUnidade: "",
-          preco: "",
-          cobrancaACada: "",
-          numeroDeCobranca: "",
-          avaliacaoGratuita: "",
-          taxaDeConfiguracao: "",
-          imposto: "",
-          descricaoDoPlano: "",
-          ativo: true,
-          permitirClientesAddComplemento: false,
-          fields: [],
-        },
-      };
-    },
-    computed: {
-      newPlano() {
-        return this.model && this.model.id && this.model.id > 0;
+        { text: "Código do plano", value: "codigoPlano" },
+        { text: "Nome da unidade", value: "nomeUnidade" },
+        { text: "Preço", value: "preco" },
+        { text: "Cobrar a cada", value: "cobrancaACada" },
+        { text: "Ciclos de cobrança", value: "numeroDeCobranca" },
+        { text: "Ativo", value: "ativo" },
+        { text: "Ações", value: "actions", sortable: false },
+      ],
+      planos: [],
+      model: {
+        nomePlano: "",
+        codigoPlano: "",
+        nomeUnidade: "",
+        preco: "",
+        cobrancaACada: "",
+        numeroDeVezesDeCobranca: "",
+        avaliacaoGratuita: "",
+        taxaDeConfiguracao: "",
+        imposto: "",
+        descricaoDoPlano: "",
+        ativo: true,
+        permitirClientesAddComplemento: false,
+        fields: [],
       },
+      editedIndex: -1,
+      editedItem: {
+        nomePlano: "",
+        codigoPlano: "",
+        nomeUnidade: "",
+        preco: "",
+        cobrarACada: "",
+        numeroDeCobranca: "",
+        avaliacaoGratuita: "",
+        taxaDeConfiguracao: "",
+        imposto: "",
+        descricaoDoPlano: "",
+        ativo: true,
+        permitirClientesAddComplemento: false,
+        fields: [],
+      },
+      defaultItem: {
+        nomePlano: "",
+        codigoPlano: "",
+        nomeUnidade: "",
+        preco: "",
+        cobrancaACada: "",
+        numeroDeCobranca: "",
+        avaliacaoGratuita: "",
+        taxaDeConfiguracao: "",
+        imposto: "",
+        descricaoDoPlano: "",
+        ativo: true,
+        permitirClientesAddComplemento: false,
+        fields: [],
+      },
+    };
+  },
+  computed: {
+    newPlano() {
+      return this.model && this.model.id && this.model.id > 0;
     },
-    watch: {
-      loader() {
-        const l = this.loader;
-        this[l] = !this[l];
+  },
+  watch: {
+    loader() {
+      const l = this.loader;
+      this[l] = !this[l];
 
-        setTimeout(() => (this[l] = false), 3000);
+      setTimeout(() => (this[l] = false), 3000);
 
-        this.loader = null;
-      },
-      dialog(val) {
-        val || this.close();
-      },
-      dialogDelete(val) {
-        val || this.closeDelete();
-      },
+      this.loader = null;
     },
-    created() {},
-    methods: {
-      getPlanos() {
-        let self = this;
-        self.$api
-          .get(`planos?populate=child_of`)
-          .then(({ data }) => {
-            self.planos = data.data.map((item) => {
-              return { id: item.id, ...item.attributes };
-            });
-            console.log(self.planos);
-          })
-          .catch((erro) => {
-            console.log(erro);
-          });
-      },
-      doSave() {
-        let self = this;
-        if (self.model && self.model.id && self.model.id > 0) self.save();
-        else self.novoPlano();
-      },
-      novoPlano() {
-        let self = this;
-        // self.model["customer"] = self.clienteSelecionado;
-        // self.model["id"] = self.planoSelecionado;
-        const child_of = self.$store.state.app.user.id;
-        self.$api
-          .post("planos", {
-            data: {
-              numeroDeCobranca: self.model.numeroDeCobranca,
-              nomePlano: self.model.nomePlano,
-              codigoPlano: self.model.codigoPlano,
-              nomeUnidade: self.model.nomeUnidade,
-              preco: self.model.preco,
-              cobrancaACada: self.model.cobrancaACada,
-              numeroDeVezesDeCobranca: self.model.numeroDeVezesDeCobranca,
-              avaliacaoGratuita: self.model.avaliacaoGratuita,
-              taxaDeConfiguracao: self.model.taxaDeConfiguracao,
-              imposto: self.model.imposto,
-              descricaoDoPlano: self.model.descricaoDoPlano,
-              ativo: self.model.ativo,
-              fields: self.model.fields,
-              permitirClientesAddComplemento:
-                self.model.permitirClientesAddComplemento,
-              child_of: child_of,
-            },
-          })
-          .then(() => {
-            setTimeout(() => {
-              self.dialog = false;
-              self.getPlanos();
-            }, 1000);
-          });
-      },
-      save() {
-        let self = this;
-        // self.model["customer"] = self.clienteSelecionado;
-        // self.model["id"] = self.planoSelecionado;
-        const child_of = self.$store.state.app.user.id;
-        self.$api
-          .put("planos/" + self.model.id, {
-            data: {
-              numeroDeCobranca: self.model.numeroDeCobranca,
-              nomePlano: self.model.nomePlano,
-              codigoPlano: self.model.codigoPlano,
-              nomeUnidade: self.model.nomeUnidade,
-              preco: self.model.preco,
-              cobrancaACada: self.model.cobrancaACada,
-              numeroDeVezesDeCobranca: self.model.numeroDeVezesDeCobranca,
-              avaliacaoGratuita: self.model.avaliacaoGratuita,
-              taxaDeConfiguracao: self.model.taxaDeConfiguracao,
-              imposto: self.model.imposto,
-              descricaoDoPlano: self.model.descricaoDoPlano,
-              ativo: self.model.ativo,
-              fields: self.model.fields,
-              permitirClientesAddComplemento:
-                self.model.permitirClientesAddComplemento,
-              child_of: child_of,
-            },
-          })
-          .then(() => {
-            if (self.editedIndex > -1)
-              Object.assign(self.planos[self.editedIndex], self.model.id);
-            else self.planos.push(self.model);
-            self.loading = true;
-            setTimeout(() => {
-              self.loading = false;
-              self.dialog = false;
-              self.getPlanos();
-            }, 1000);
-          });
-      },
-      editItem(item) {
-        let self = this;
-        self.editedIndex = self.planos.indexOf((i) => i.id === item.id);
-        self.model = Object.assign({}, item);
-        self.dialog = true;
-      },
-      deleteItem(item) {
-        let self = this;
-        self.model = Object.assign({}, item);
-        self.dialogDelete = true;
-      },
-      deleteItemConfirm() {
-        let self = this;
-        self.$api.delete("Planos/" + self.model.id).then(() => {
-          self.dialogDelete = false;
-          self.model = Object.assign({}, self.defaultItem);
-          self.getPlanos();
-        });
-      },
-      close() {
-        let self = this;
-        self.dialog = false;
-        self.$nextTick(() => {
-          self.model = Object.assign({}, self.defaultItem);
-          self.editedIndex = -1;
-        });
-      },
-      closeDelete() {
-        let self = this;
-        self.dialogDelete = false;
-        self.$nextTick(() => {
-          self.model = Object.assign({}, self.defaultItem);
-          self.editedIndex = -1;
-        });
-      },
+    dialog(val) {
+      val || this.close();
     },
-    mounted() {
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+  created() {},
+  methods: {
+    getPlanos() {
       let self = this;
-      self.getPlanos();
+      self.$api
+        .get(`planos?populate=child_of`)
+        .then(({ data }) => {
+          self.planos = data.data.map((item) => {
+            return { id: item.id, ...item.attributes };
+          });
+          console.log(self.planos);
+        })
+        .catch((erro) => {
+          console.log(erro);
+        });
     },
-    components: {
-      SideBar,
+    doSave() {
+      let self = this;
+      if (self.model && self.model.id && self.model.id > 0) self.save();
+      else self.novoPlano();
     },
-  };
+    novoPlano() {
+      let self = this;
+      // self.model["customer"] = self.clienteSelecionado;
+      // self.model["id"] = self.planoSelecionado;
+      const child_of = self.$store.state.app.user.id;
+      self.$api
+        .post("planos", {
+          data: {
+            numeroDeCobranca: self.model.numeroDeCobranca,
+            nomePlano: self.model.nomePlano,
+            codigoPlano: self.model.codigoPlano,
+            nomeUnidade: self.model.nomeUnidade,
+            preco: self.model.preco,
+            cobrancaACada: self.model.cobrancaACada,
+            numeroDeVezesDeCobranca: self.model.numeroDeVezesDeCobranca,
+            avaliacaoGratuita: self.model.avaliacaoGratuita,
+            taxaDeConfiguracao: self.model.taxaDeConfiguracao,
+            imposto: self.model.imposto,
+            descricaoDoPlano: self.model.descricaoDoPlano,
+            ativo: self.model.ativo,
+            fields: self.model.fields,
+            permitirClientesAddComplemento:
+              self.model.permitirClientesAddComplemento,
+            child_of: child_of,
+          },
+        })
+        .then(() => {
+          setTimeout(() => {
+            self.dialog = false;
+            self.getPlanos();
+          }, 1000);
+        });
+    },
+    save() {
+      let self = this;
+      // self.model["customer"] = self.clienteSelecionado;
+      // self.model["id"] = self.planoSelecionado;
+      const child_of = self.$store.state.app.user.id;
+      self.$api
+        .put("planos/" + self.model.id, {
+          data: {
+            numeroDeCobranca: self.model.numeroDeCobranca,
+            nomePlano: self.model.nomePlano,
+            codigoPlano: self.model.codigoPlano,
+            nomeUnidade: self.model.nomeUnidade,
+            preco: self.model.preco,
+            cobrancaACada: self.model.cobrancaACada,
+            numeroDeVezesDeCobranca: self.model.numeroDeVezesDeCobranca,
+            avaliacaoGratuita: self.model.avaliacaoGratuita,
+            taxaDeConfiguracao: self.model.taxaDeConfiguracao,
+            imposto: self.model.imposto,
+            descricaoDoPlano: self.model.descricaoDoPlano,
+            ativo: self.model.ativo,
+            fields: self.model.fields,
+            permitirClientesAddComplemento:
+              self.model.permitirClientesAddComplemento,
+            child_of: child_of,
+          },
+        })
+        .then(() => {
+          if (self.editedIndex > -1)
+            Object.assign(self.planos[self.editedIndex], self.model.id);
+          else self.planos.push(self.model);
+          self.loading = true;
+          setTimeout(() => {
+            self.loading = false;
+            self.dialog = false;
+            self.getPlanos();
+          }, 1000);
+        });
+    },
+    editItem(item) {
+      let self = this;
+      self.editedIndex = self.planos.indexOf((i) => i.id === item.id);
+      self.model = Object.assign({}, item);
+      self.dialog = true;
+    },
+    deleteItem(item) {
+      let self = this;
+      self.model = Object.assign({}, item);
+      self.dialogDelete = true;
+    },
+    deleteItemConfirm() {
+      let self = this;
+      self.$api.delete("Planos/" + self.model.id).then(() => {
+        self.dialogDelete = false;
+        self.model = Object.assign({}, self.defaultItem);
+        self.getPlanos();
+      });
+    },
+    close() {
+      let self = this;
+      self.dialog = false;
+      self.$nextTick(() => {
+        self.model = Object.assign({}, self.defaultItem);
+        self.editedIndex = -1;
+      });
+    },
+    closeDelete() {
+      let self = this;
+      self.dialogDelete = false;
+      self.$nextTick(() => {
+        self.model = Object.assign({}, self.defaultItem);
+        self.editedIndex = -1;
+      });
+    },
+  },
+  mounted() {
+    let self = this;
+    self.getPlanos();
+  },
+  components: {
+    SideBar,
+  },
+};
 </script>
 <style>
-  .custom-loader {
-    animation: loader 1s infinite;
-    display: flex;
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
   }
-  @-moz-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
-  @-webkit-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
   }
-  @-o-keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
   }
-  @keyframes loader {
-    from {
-      transform: rotate(0);
-    }
-    to {
-      transform: rotate(360deg);
-    }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

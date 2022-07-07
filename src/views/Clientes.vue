@@ -88,180 +88,239 @@
   </v-app>
 </template>
 <script>
-  import SideBar from "../components/SideBar";
-  import "vue-search-input/dist/styles.css";
-  import Cadastra from "../components/Clientes/Dialogs/Cadastra.vue";
+import SideBar from "../components/SideBar";
+import "vue-search-input/dist/styles.css";
+import Cadastra from "../components/Clientes/Dialogs/Cadastra.vue";
 
-  export default {
-    components: {
-      SideBar,
-      Cadastra,
-    },
-    data: () => ({
-      search: "",
-      loader: null,
-      loading: false,
-      isEditing: false,
+export default {
+  components: {
+    SideBar,
+    Cadastra,
+  },
+  data: () => ({
+    search: "",
+    loader: null,
+    loading: false,
+    isEditing: false,
+    cep: null,
+    resultadoCEP: "",
+    dialog: false,
+    dialogDelete: false,
+    adminType: ["true", "false"],
+    notifications: ["true", "false"],
+    headers: [
+      {
+        text: "Nome",
+        align: "center",
+        sortable: true,
+        value: "nome",
+      },
+      {
+        text: "Plano",
+        align: "center",
+        sortable: true,
+        value: "plano",
+      },
+      {
+        text: "CPF",
+        align: "center",
+        value: "cpfCnpj",
+      },
+      {
+        text: "Email",
+        align: "center",
+        value: "email",
+      },
+      {
+        text: "Telefone",
+        align: "center",
+        value: "phone",
+      },
+      {
+        text: "CEP",
+        align: "center",
+        value: "cep",
+      },
+      { text: "Ações", value: "actions", sortable: false },
+    ],
+    cliente: [],
+    planoSelecionado: "",
+    model: {
+      nome: "",
+      cpfCnpj: "",
+      email: "",
+      phone: "",
+      address: "",
+      addressNumber: "",
+      complement: "",
+      province: "",
       cep: null,
-      resultadoCEP: "",
-      dialog: false,
-      dialogDelete: false,
-      adminType: ["true", "false"],
-      notifications: ["true", "false"],
-      headers: [
-        {
-          text: "Nome",
-          align: "center",
-          sortable: true,
-          value: "nome",
-        },
-        {
-          text: "Plano",
-          align: "center",
-          sortable: true,
-          value: "plano",
-        },
-        {
-          text: "CPF",
-          align: "center",
-          value: "cpfCnpj",
-        },
-        {
-          text: "Email",
-          align: "center",
-          value: "email",
-        },
-        {
-          text: "Telefone",
-          align: "center",
-          value: "phone",
-        },
-        {
-          text: "CEP",
-          align: "center",
-          value: "cep",
-        },
-        { text: "Ações", value: "actions", sortable: false },
-      ],
-      cliente: [],
-      planoSelecionado: "",
-      model: {
-        nome: "",
-        cpfCnpj: "",
-        email: "",
-        phone: "",
-        address: "",
-        addressNumber: "",
-        complement: "",
-        province: "",
-        cep: null,
-        externalReference: "",
-        notification: "",
-        additionalEmails: "",
-        observations: "",
-        groupName: "",
-        admin: "",
-        plano: "",
-        datadenascimento: "",
-        planoSelecionado: null,
-      },
-      defaultItem: {
-        nome: "",
-        cpfCnpj: "",
-        email: "",
-        phone: "",
-        address: "",
-        addressNumber: "",
-        complement: "",
-        province: "",
-        cep: null,
-        externalReference: "",
-        notificationDisabled: "",
-        additionalEmails: "",
-        observations: "",
-        groupName: "",
-        admin: "",
-        plano: "",
-        datadenascimento: "",
-        planoSelecionado: null,
-      },
-      subscriptions: [],
-      clienteSelecionado: null,
-      pCliente: null,
-      cobrancas: {
-        cliente: "",
-        billingType: "",
-        value: "",
-        dueDate: "",
-        descripition: "",
-      },
-    }),
+      externalReference: "",
+      notification: "",
+      additionalEmails: "",
+      observations: "",
+      groupName: "",
+      admin: "",
+      plano: "",
+      datadenascimento: "",
+      planoSelecionado: null,
+    },
+    defaultItem: {
+      nome: "",
+      cpfCnpj: "",
+      email: "",
+      phone: "",
+      address: "",
+      addressNumber: "",
+      complement: "",
+      province: "",
+      cep: null,
+      externalReference: "",
+      notificationDisabled: "",
+      additionalEmails: "",
+      observations: "",
+      groupName: "",
+      admin: "",
+      plano: "",
+      datadenascimento: "",
+      planoSelecionado: null,
+    },
+    subscriptions: [],
+    clienteSelecionado: null,
+    pCliente: null,
+    cobrancas: {
+      cliente: "",
+      billingType: "",
+      value: "",
+      dueDate: "",
+      descripition: "",
+    },
+  }),
 
-    methods: {
-      openCadastroDialog() {
-        this.$refs["cadastra-dialog"].open(false);
-      },
+  methods: {
+    openCadastroDialog() {
+      this.$refs["cadastra-dialog"].open(false);
+    },
 
-      getCliente() {
-        let self = this;
-        self.$api
-          .get(`clientes?populate=planos&populate=child_of`)
-          .then(({ data }) => {
-            self.cliente = data.data.map((item) => {
-              return { id: item.id, ...item.attributes };
-            });
-          })
-          .catch((erro) => {
-            console.log(erro);
+    getCliente() {
+      let self = this;
+      self.$api
+        .get(`clientes?populate=planos&populate=child_of`)
+        .then(({ data }) => {
+          self.cliente = data.data.map((item) => {
+            return { id: item.id, ...item.attributes };
           });
-      },
-
-      getPlanocliente(item) {
-        let self = this;
-        self.model = Object.assign({}, item);
-        self.$api
-          .get("clientes/" + self.model.id + "?populate=plano")
-          .then((res) => {
-            self.planoedit = res.data.data.attributes.plano;
-            self.model.planoSelecionado =
-              self.data[0].attributes.plano.data.attributes.nomePlano;
-            console.log(self.model.model.planoSelecionado);
-          })
-          .catch((erro) => {
-            console.log(erro);
-          });
-      },
-
-      deleteItem(item) {
-        let self = this;
-        self.model = Object.assign({}, item);
-        self.dialogDelete = true;
-      },
-      deleteItemConfirm() {
-        let self = this;
-        self.$api.delete("clientes/" + self.model.id).then(() => {
-          self.dialogDelete = false;
-          self.model = Object.assign({}, self.defaultItem);
-          self.getCliente();
+        })
+        .catch((erro) => {
+          console.log(erro);
         });
-      },
+    },
 
-      editItem(item) {
-        this.$refs["cadastra-dialog"].open(Object.assign({}, item));
-      },
+    getPlanocliente(item) {
+      let self = this;
+      self.model = Object.assign({}, item);
+      self.$api
+        .get("clientes/" + self.model.id + "?populate=plano")
+        .then((res) => {
+          self.planoedit = res.data.data.attributes.plano;
+          self.model.planoSelecionado =
+            self.data[0].attributes.plano.data.attributes.nomePlano;
+          console.log(self.model.model.planoSelecionado);
+        })
+        .catch((erro) => {
+          console.log(erro);
+        });
+    },
 
-      closeDelete() {
-        let self = this;
+    deleteItem(item) {
+      let self = this;
+      self.model = Object.assign({}, item);
+      self.dialogDelete = true;
+    },
+    deleteItemConfirm() {
+      let self = this;
+      self.loading = false;
+      self.$api.delete("clientes/" + self.model.id).then(() => {
         self.dialogDelete = false;
-        self.$nextTick(() => {
-          self.model = Object.assign({}, self.defaultItem);
-          self.editedIndex = -1;
-        });
-      },
+        self.model = Object.assign({}, self.defaultItem);
+        self.getCliente();
+      });
     },
-    mounted() {
-      console.log(this.$store.state.app.user.id);
-      this.getCliente();
+
+    editItem(item) {
+      this.$refs["cadastra-dialog"].open(Object.assign({}, item));
     },
-  };
+
+    closeDelete() {
+      let self = this;
+      self.dialogDelete = false;
+      self.$nextTick(() => {
+        self.model = Object.assign({}, self.defaultItem);
+        self.editedIndex = -1;
+      });
+    },
+  },
+  mounted() {
+    console.log(this.$store.state.app.user.id);
+    this.getCliente();
+  },
+};
 </script>
+<style>
+.custom-loader {
+  animation: loader 1s infinite;
+  display: flex;
+}
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+body {
+  font-family: "verdana";
+}
+h1 {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+p {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+hr {
+  margin-bottom: 15px;
+}
+.msg {
+  padding-top: 15px;
+}
+.referencia {
+  padding-bottom: 15px;
+}
+</style>
