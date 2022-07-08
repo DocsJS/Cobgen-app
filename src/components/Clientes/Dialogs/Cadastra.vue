@@ -121,7 +121,7 @@
                     class="form-control"
                     placeholder="cep"
                     maxlength="8"
-                    v-model="model.cep"
+                    v-model="cep"
                   ></v-text-field>
                   <ul class="list-group">
                     <h3

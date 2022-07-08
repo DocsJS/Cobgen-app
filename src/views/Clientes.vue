@@ -8,7 +8,7 @@
         </div>
         <v-spacer></v-spacer>
         <v-btn color="#30c3cf" dark large @click="openCadastroDialog">
-          <h5>Cadastrar cliente A</h5>
+          <h5>Cadastrar cliente</h5>
         </v-btn>
         <v-btn icon>
           <v-icon color="black">mdi-help-circle-outline</v-icon>
