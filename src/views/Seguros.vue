@@ -342,7 +342,8 @@
                       <v-col>
                         <h5>Quantidade de membros na familia</h5>
                         <v-text-field
-                          v-model="model.celular"
+                          v-model="model.quantidadevidas"
+                          type="number"
                           offset-y
                           label="Digite a quantidade"
                           outlined
@@ -426,7 +427,8 @@
                       <v-col>
                         <h5>Quantidade de membros na familia</h5>
                         <v-text-field
-                          v-model="model.celular"
+                          v-model="model.quantidadevidas"
+                          type="number"
                           offset-y
                           label="Digite a quantidade"
                           outlined
@@ -511,7 +513,8 @@
                       <v-col>
                         <h5>Quantidade de vidas</h5>
                         <v-text-field
-                          v-model="model.celular"
+                          v-model="model.quantidadevidas"
+                          type="number"
                           offset-y
                           label="Digite a quantidade de vidas"
                           outlined
@@ -675,6 +678,7 @@ export default {
       portao: "",
       condutor: "",
       quantidade: "",
+      quantidadevidas: "",
       placa: "",
       alarme: "",
       modificacao: "",
@@ -694,6 +698,7 @@ export default {
       portao: "",
       condutor: "",
       quantidade: "",
+      quantidadevidas: "",
       placa: "",
       alarme: "",
       modificacao: "",
@@ -713,6 +718,7 @@ export default {
       portao: "",
       condutor: "",
       quantidade: "",
+      quantidadevidas: "",
       placa: "",
       alarme: "",
       modificacao: "",
@@ -809,6 +815,7 @@ export default {
             portao: self.model.portao,
             condutor: self.model.condutor,
             quantidade: self.model.quantidade,
+            quantidadevidas: self.model.quantidadevidas,
             placa: self.model.placa,
             alarme: self.model.alarme,
             modificacao: self.model.modificacao,
@@ -845,6 +852,7 @@ export default {
             portao: self.model.portao,
             condutor: self.model.condutor,
             quantidade: self.model.quantidade,
+            quantidadevidas: self.model.quantidadevidas,
             placa: self.model.placa,
             alarme: self.model.alarme,
             modificacao: self.model.modificacao,
