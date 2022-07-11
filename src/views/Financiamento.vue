@@ -1024,19 +1024,8 @@ export default {
   methods: {
     getFinanciamento() {
       let self = this;
-      const id = self.$store.state.app.user.id;
-      const qs = require("qs");
-      const query = qs.stringify({
-        where: {
-          child_of: {
-            data: {
-              id: id,
-            },
-          },
-        },
-      });
       self.$api
-        .get(`financiamentos?populate=documentos&populate=child_of&${query}`)
+        .get(`financiamentos?populate=documentos&populate=child_of`)
         .then(({ data }) => {
           self.financiamento = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -1078,9 +1067,9 @@ export default {
     },
     novoFinanciamento() {
       let self = this;
-      self.model["cliente"] = self.clienteSelecionado;
-      self.model["financiamento"] = self.financiamentoSelecionado;
-      self.model["child_of"] = self.$store.state.app.user.id;
+      // self.model["cliente"] = self.clienteSelecionado;
+      // self.model["financiamento"] = self.financiamentoSelecionado;
+      const child_of = self.$store.state.app.user.id;
       let form = self.$refs.form;
       self.$api
         .post("upload", new FormData(form))
@@ -1100,7 +1089,7 @@ export default {
               abertura: self.model.abertura,
               placa: self.model.placa,
               chassi: self.model.chassi,
-              // documentos: self.documentos,
+              child_of: child_of,
               arquivo: self.arquivo,
               valordecompra: self.model.valordecompra,
               marca: self.model.marca,
@@ -1160,8 +1149,7 @@ export default {
     },
     save() {
       let self = this;
-      self.model["financiamento"] = self.financiamentoSelecionado;
-      self.model["cliente"] = self.clienteSelecionado;
+      const child_of = self.$store.state.app.user.id;
       self.$api
         .put("financiamentos/" + self.finanID.id, {
           data: {
@@ -1177,7 +1165,7 @@ export default {
             placa: self.model.placa,
             chassi: self.model.chassi,
             arquivo: self.arquivo,
-            // documentos: self.documentos,
+            child_of: child_of,
             valordecompra: self.model.valordecompra,
             marca: self.model.marca,
             versao: self.model.versao,
@@ -1284,20 +1272,7 @@ export default {
           console.log(erro);
         });
     },
-    getAssinaturas() {
-      let self = this;
-      self.$api
-        .get("subscriptions")
-        .then(({ data }) => {
-          self.subscriptions = data.data.map((item) => {
-            return { id: item.id, ...item.attributes };
-          });
-          // console.log(self.subscriptions);
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
+
     getCliente() {
       let self = this;
       self.$api
@@ -1332,7 +1307,6 @@ export default {
     self.getFinanciamento();
     self.getCliente();
     self.getPlanos();
-    self.getAssinaturas();
     self.getCobrancas();
   },
   components: {
