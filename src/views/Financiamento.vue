@@ -890,7 +890,6 @@ export default {
     clienteSelecionado: null,
     financiamentoSelecionado: null,
     financiamento: [],
-
     documentos: [
       {
         name: "",
@@ -951,7 +950,6 @@ export default {
       pai: "",
       mae: "",
     },
-
     defaultItem: {
       tempo: "",
       cnh: "",
@@ -1137,7 +1135,6 @@ export default {
             },
           });
         })
-
         .then(() => {
           self.loading = true;
           setTimeout(() => {
@@ -1244,7 +1241,6 @@ export default {
         self.getFinanciamento();
       });
     },
-
     close() {
       let self = this;
       self.dialog = false;
@@ -1272,7 +1268,6 @@ export default {
           console.log(erro);
         });
     },
-
     getCliente() {
       let self = this;
       self.$api
