@@ -732,9 +732,7 @@ export default {
     loader() {
       const l = this.loader;
       this[l] = !this[l];
-
       setTimeout(() => (this[l] = false), 1000);
-
       this.loader = null;
     },
     dialog(val) {
@@ -823,7 +821,6 @@ export default {
             // documentos: self.documentos,
           },
         })
-
         .then(() => {
           setTimeout(() => {
             self.dialog = false;
@@ -832,7 +829,6 @@ export default {
           console.log(self.model["seguro"]);
         });
     },
-
     save() {
       let self = this;
       self.model["cliente"] = self.clienteSelecionado;
