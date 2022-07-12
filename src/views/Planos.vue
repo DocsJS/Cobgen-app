@@ -362,8 +362,6 @@ export default {
     },
     novoPlano() {
       let self = this;
-      // self.model["customer"] = self.clienteSelecionado;
-      // self.model["id"] = self.planoSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
         .post("planos", {
@@ -395,8 +393,6 @@ export default {
     },
     save() {
       let self = this;
-      // self.model["customer"] = self.clienteSelecionado;
-      // self.model["id"] = self.planoSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
         .put("planos/" + self.model.id, {

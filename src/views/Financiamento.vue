@@ -1065,8 +1065,6 @@ export default {
     },
     novoFinanciamento() {
       let self = this;
-      // self.model["cliente"] = self.clienteSelecionado;
-      // self.model["financiamento"] = self.financiamentoSelecionado;
       const child_of = self.$store.state.app.user.id;
       let form = self.$refs.form;
       self.$api

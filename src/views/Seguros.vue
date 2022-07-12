@@ -66,7 +66,6 @@
                           offset-y
                           item-value="nome"
                           item-text="nome"
-                          :items="cliente"
                           label="Selecione o tipo"
                           outlined
                           solo
@@ -460,7 +459,6 @@
                           color="cyan"
                         ></v-text-field>
                       </v-col>
-
                       <v-col>
                         <h5>CEP</h5>
                         <v-text-field
@@ -648,7 +646,7 @@ export default {
       {
         text: "Email",
         align: "center",
-        value: "email",
+        value: "additionalEmails",
       },
       {
         text: "Estado Civil",
@@ -662,12 +660,12 @@ export default {
       },
       { text: "Ações", value: "actions", sortable: false },
     ],
-    cliente: [
-      {
-        nome: "",
-      },
-    ],
-    clienteSelecionado: null,
+    // cliente: [
+    //   {
+    //     nome: "",
+    //   },
+    // ],
+    // clienteSelecionado: null,
     seguro: [],
     model: {
       nome: "",
@@ -753,7 +751,7 @@ export default {
     getSeguro() {
       let self = this;
       self.$api
-        .get(`seguros?populate=clientes&populate=child_of`)
+        .get(`seguros?populate=child_of`)
         .then(({ data }) => {
           self.seguro = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -764,30 +762,6 @@ export default {
           console.log(erro);
         });
     },
-    // getDocumento(item) {
-    //   let self = this;
-    //   self.model = Object.assign({}, item);
-    //   self.$api
-    //     .get("seguros/" + self.model.id + "?populate=documentos")
-    //     .then((res) => {
-    //       self.segID = res.data.data;
-    //       self.arquivo =
-    //         self.segID.attributes.documentos.data[0].attributes.url;
-    //       self.arquivoname =
-    //         self.segID.attributes.documentos.data[0].attributes.name;
-    //       console.log(self.arquivo);
-    //     })
-    //     .catch((erro) => {
-    //       console.log(erro);
-    //     });
-    // },
-    // chooseFiles: function () {
-    //   document.getElementById("file");
-    // },
-    // handleFileUpload() {
-    //   let self = this;
-    //   self.url = URL.createObjectURL(self.arquivo);
-    // },
     doSave() {
       let self = this;
       if (self.model && self.model.id && self.model.id > 0) self.save();
@@ -795,14 +769,7 @@ export default {
     },
     novoSeguro() {
       let self = this;
-      self.model["cliente"] = self.clienteSelecionado;
-      self.model["seguro"] = self.seguroSelecionado;
       const child_of = self.$store.state.app.user.id;
-      // let form = self.$refs.form;
-      self.$api;
-      // .then(() => {
-      //   // self.documentos = res.data[0];
-      //   // console.log(self.documentos.id);
       self.$api
         .post("seguros/email", {
           data: {
@@ -825,7 +792,6 @@ export default {
             trabalho2: self.model.trabalho2,
             estacionamento: self.model.estacionamento,
             child_of: child_of,
-            // documentos: self.documentos,
           },
         })
         .then(() => {
@@ -833,15 +799,13 @@ export default {
             self.dialog = false;
             self.getSeguro();
           }, 1000);
-          console.log(self.model["seguro"]);
         });
     },
     save() {
       let self = this;
-      self.model["cliente"] = self.clienteSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put(`seguros/${self.model.id}?populate=child_of`, +self.segID, {
+        .put("seguros/" + self.model.id, {
           data: {
             nome: self.model.nome,
             email: self.model.email,
@@ -862,7 +826,6 @@ export default {
             trabalho2: self.model.trabalho2,
             estacionamento: self.model.estacionamento,
             child_of: child_of,
-            // documentos: self.documentos,
           },
         })
         .then(() => {
@@ -912,25 +875,24 @@ export default {
         self.editedIndex = -1;
       });
     },
-    getCliente() {
-      let self = this;
-      self.$api
-        .get("clientes")
-        .then(({ data }) => {
-          self.cliente = data.data.map((item) => {
-            return { id: item.id, ...item.attributes };
-          });
-          console.log(self.cliente);
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
+    // getCliente() {
+    //   let self = this;
+    //   self.$api
+    //     .get("clientes")
+    //     .then(({ data }) => {
+    //       self.cliente = data.data.map((item) => {
+    //         return { id: item.id, ...item.attributes };
+    //       });
+    //       console.log(self.cliente);
+    //     })
+    //     .catch((erro) => {
+    //       console.log(erro);
+    //     });
+    // },
   },
   mounted() {
     let self = this;
     self.getSeguro();
-    self.getCliente();
   },
   components: {
     SideBar,
