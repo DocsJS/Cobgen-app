@@ -190,7 +190,7 @@
               outlined
               v-model="search"
               append-icon="mdi-magnify"
-              label="Buscar "
+              label="Buscar"
               single-line
               hide-details
             ></v-text-field>
