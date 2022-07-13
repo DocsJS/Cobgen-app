@@ -750,8 +750,28 @@ export default {
   methods: {
     getSeguro() {
       let self = this;
+      // const child_of = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify(
+        {
+          populate: { child_of: true },
+          // sort: ["createdAt"],
+          // pagination: {
+          //   limit: params._limit,
+          //   start: params._start,
+          // },
+          // filters: {
+          //   child_of: {
+          //     id: child_of,
+          //   },
+          // },
+        },
+        {
+          encodeValuesOnly: true,
+        }
+      );
       self.$api
-        .get(`seguros?populate=child_of`)
+        .get(`seguros?${query}`)
         .then(({ data }) => {
           self.seguro = data.data.map((item) => {
             return { id: item.id, ...item.attributes };

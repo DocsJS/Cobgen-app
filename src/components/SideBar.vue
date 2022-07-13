@@ -1,13 +1,19 @@
 <template>
   <v-navigation-drawer
     v-model="drawer"
-    app
     permanent
-    expand-on-hover
-    mini-variant
+    app
+    :mini-variant.sync="mini"
     mini-variant-width="70"
-    class="elevation-0"
+    class="elevation-1"
   >
+    <v-col>
+      <v-btn @click.stop="mini = !mini" icon x-large text>
+        <vue-star animate="animated bounce" color="cyan">
+          <i slot="icon" class="fa fa-bars"></i>
+        </vue-star>
+      </v-btn>
+    </v-col>
     <v-list-item-avatar
       class="d-block text-center mx-auto mt-4"
       color=""
@@ -18,7 +24,11 @@
 
     <v-list nav dense>
       <v-list-item-group v-model="selectedItem">
-        <v-list-item v-for="(item, i) in items" :key="`vendas-root-${i}`" :to="item.to">
+        <v-list-item
+          v-for="(item, i) in items"
+          :key="`vendas-root-${i}`"
+          :to="item.to"
+        >
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
@@ -33,7 +43,11 @@
           <template v-slot:activator>
             <v-list-item-title>Vendas</v-list-item-title>
           </template>
-          <v-list-item v-for="(item, i) in items3" :key="`vendas-item-${i}`" :to="item.to">
+          <v-list-item
+            v-for="(item, i) in items3"
+            :key="`vendas-item-${i}`"
+            :to="item.to"
+          >
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -49,7 +63,11 @@
           <template v-slot:activator>
             <v-list-item-title>Ver mais</v-list-item-title>
           </template>
-          <v-list-item v-for="(item, i) in items2" :key="`see-more-root-${i}`" :to="item.to">
+          <v-list-item
+            v-for="(item, i) in items2"
+            :key="`see-more-root-${i}`"
+            :to="item.to"
+          >
             <v-list-item-icon>
               <v-icon v-text="item.icon"></v-icon>
             </v-list-item-icon>
@@ -58,7 +76,11 @@
             </v-list-item-content>
           </v-list-item>
         </v-list-group>
-        <v-list-item v-for="(item, i) in items4" :key="`see-more-item-${i}`" :to="item.to">
+        <v-list-item
+          v-for="(item, i) in items4"
+          :key="`see-more-item-${i}`"
+          :to="item.to"
+        >
           <v-list-item-icon>
             <v-icon v-text="item.icon"></v-icon>
           </v-list-item-icon>
@@ -66,17 +88,9 @@
             <v-list-item-title v-text="item.text"></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <!-- Logout -->
-        <v-list-item @click="logout">
-          <v-list-item-icon>
-            <v-icon v-text="'mdi-exit-to-app'" color="red"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="'Sair'"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
       </v-list-item-group>
     </v-list>
+    <!-- Logout -->
     <div
       style="
         position: absolute;
@@ -87,11 +101,17 @@
         right: 0;
         text-align: center;
       "
-    ></div>
+    >
+      <v-list-item @click="logout">
+        <v-icon v-text="'mdi-exit-to-app'" color="red"></v-icon>
+        <v-list-item-title v-text="'Sair'"></v-list-item-title>
+      </v-list-item>
+    </div>
   </v-navigation-drawer>
 </template>
 
 <script>
+import VueStar from "vue-star";
 export default {
   data: () => ({
     selectedItem: null,
@@ -99,6 +119,7 @@ export default {
     selectedItem3: null,
     selectedItem4: null,
     drawer: null,
+    mini: true,
     items: [
       { text: "Início", icon: "mdi-monitor-dashboard", to: "/" },
       { text: "Relatórios", icon: "mdi-chart-bar-stacked", to: "/relatorios" },
@@ -130,6 +151,9 @@ export default {
       ["Settings", "mdi-cog-outline"],
     ],
   }),
+  components: {
+    VueStar,
+  },
   methods: {
     logout() {
       let self = this;

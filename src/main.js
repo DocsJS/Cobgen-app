@@ -5,8 +5,6 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import $api from './plugins/axios'
 
-Vue.config.productionTip = false
-
 router.beforeEach((to, from, next) => {
   const user = localStorage.user ? JSON.parse(localStorage.user) : null
   const jwt = localStorage.jwt ? localStorage.jwt : null

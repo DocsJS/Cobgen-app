@@ -254,7 +254,7 @@ export default {
       dialogDelete: false,
       loader: null,
       loading: false,
-      cabranCada: ["Semana(s)", "Mês(s)", "Ano(s)"],
+      cabranCada: ["Semana(s)", "Mês", "Ano(s)"],
       headers: [
         {
           text: "Nome do Plano",

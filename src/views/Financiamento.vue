@@ -752,7 +752,7 @@
                           solo
                           flat
                         ></v-text-field>
-                        <form ref="form">
+                        <!-- <form ref="form">
                           <v-row>
                             <v-col cols="12" md="2">
                               <v-file-input
@@ -773,7 +773,7 @@
                               <v-img :src="url ? url : arquivo"></v-img>
                             </v-col>
                           </v-row>
-                        </form>
+                        </form> -->
                       </v-col>
                     </v-col>
                   </v-tab-item>
@@ -890,11 +890,11 @@ export default {
     clienteSelecionado: null,
     financiamentoSelecionado: null,
     financiamento: [],
-    documentos: [
-      {
-        name: "",
-      },
-    ],
+    // documentos: [
+    //   {
+    //     name: "",
+    //   },
+    // ],
     model: {
       tempo: "",
       cnh: "",
@@ -1022,8 +1022,28 @@ export default {
   methods: {
     getFinanciamento() {
       let self = this;
+      // const child_of = self.$store.state.app.user.id;
+      const qs = require("qs");
+      const query = qs.stringify(
+        {
+          populate: { child_of: true },
+          // sort: ["createdAt"],
+          // pagination: {
+          //   limit: params._limit,
+          //   start: params._start,
+          // },
+          // filters: {
+          //   child_of: {
+          //     id: child_of,
+          //   },
+          // },
+        },
+        {
+          encodeValuesOnly: true,
+        }
+      );
       self.$api
-        .get(`financiamentos?populate=documentos&populate=child_of`)
+        .get(`financiamentos?${query}`)
         .then(({ data }) => {
           self.financiamento = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
@@ -1033,31 +1053,31 @@ export default {
           console.log(erro);
         });
     },
-    getDocumento(item) {
-      let self = this;
-      self.model = Object.assign({}, item);
-      self.$api
-        .get("financiamentos/" + self.model.id + "?populate=documentos")
-        .then((res) => {
-          self.finanID = res.data.data;
-          self.arquivo =
-            self.finanID.attributes.documentos.data[0].attributes.url;
-          self.arquivoname =
-            self.finanID.attributes.documentos.data[0].attributes.name;
-          console.log(self.arquivo);
-        })
-        .catch((erro) => {
-          console.log(erro);
-        });
-    },
-    chooseFiles: function () {
-      document.getElementById("file");
-    },
+    // getDocumento(item) {
+    //   let self = this;
+    //   self.model = Object.assign({}, item);
+    //   self.$api
+    //     .get("financiamentos/" + self.model.id + "?populate=documentos")
+    //     .then((res) => {
+    //       self.finanID = res.data.data;
+    //       self.arquivo =
+    //         self.finanID.attributes.documentos.data[0].attributes.url;
+    //       self.arquivoname =
+    //         self.finanID.attributes.documentos.data[0].attributes.name;
+    //       console.log(self.arquivo);
+    //     })
+    //     .catch((erro) => {
+    //       console.log(erro);
+    //     });
+    // },
+    // chooseFiles: function () {
+    //   document.getElementById("file");
+    // },
 
-    handleFileUpload() {
-      let self = this;
-      self.url = URL.createObjectURL(self.arquivo);
-    },
+    // handleFileUpload() {
+    //   let self = this;
+    //   self.url = URL.createObjectURL(self.arquivo);
+    // },
     doSave() {
       let self = this;
       if (self.model && self.model.id && self.model.id > 0) self.save();
@@ -1066,72 +1086,72 @@ export default {
     novoFinanciamento() {
       let self = this;
       const child_of = self.$store.state.app.user.id;
-      let form = self.$refs.form;
+      // let form = self.$refs.form;
+      // self.$api
+      //   // // .post("upload", new FormData(form))
+      //   // .then((res) => {
+      //   //   // self.documentos = res.data[0];
+      //   //   // console.log(self.documentos.id);
       self.$api
-        .post("upload", new FormData(form))
-        .then((res) => {
-          self.documentos = res.data[0];
-          console.log(self.documentos.id);
-          self.$api.post("financiamentos/email", {
-            data: {
-              email: self.model.email,
-              FormularioSelecionado: self.FormularioSelecionado,
-              tempo: self.model.tempo,
-              cnh: self.model.cnh,
-              additionalEmails: self.model.additionalEmails,
-              conta: self.model.conta,
-              renavam: self.model.renavam,
-              valorentrada: self.model.valorentrada,
-              abertura: self.model.abertura,
-              placa: self.model.placa,
-              chassi: self.model.chassi,
-              child_of: child_of,
-              arquivo: self.arquivo,
-              valordecompra: self.model.valordecompra,
-              marca: self.model.marca,
-              versao: self.model.versao,
-              cor: self.model.cor,
-              fabricacao: self.model.fabricacao,
-              parcelar: self.model.parcelar,
-              outraseguradora: self.model.outraseguradora,
-              seguro: self.model.seguro,
-              banco: self.model.banco,
-              agencia: self.model.agencia,
-              numero: self.model.numero,
-              expedicao: self.model.expedicao,
-              Ativo: self.model.Ativo,
-              endereco: self.model.endereco,
-              oe: self.model.oe,
-              uf: self.model.uf,
-              nome: self.model.nome,
-              cpf: self.model.cpf,
-              rg: self.model.rg,
-              datadenascimento: self.model.datadenascimento,
-              estado: self.model.estado,
-              cidade: self.model.cidade,
-              renda: self.model.renda,
-              profissao: self.model.profissao,
-              cargo: self.model.cargo,
-              cnpj2: self.model.cnpj2,
-              razaosocial: self.model.razaosocial,
-              cep2: self.model.cep2,
-              telefone2: self.model.telefone2,
-              data2: self.model.data2,
-              faturamento: self.model.faturamento,
-              assinar: self.model.assinar,
-              aposentadoria: self.model.aposentadoria,
-              beneficio: self.model.beneficio,
-              atividade: self.model.atividade,
-              nomeempresa: self.model.nomeempresa,
-              admissao: self.model.admissao,
-              telefoneempresa: self.model.telefoneempresa,
-              comprovante: self.model.comprovante,
-              telefonefixo: self.model.telefonefixo,
-              celular: self.model.celular,
-              pai: self.model.pai,
-              mae: self.model.mae,
-            },
-          });
+        .post("financiamentos/email", {
+          data: {
+            child_of: child_of,
+            email: self.model.email,
+            FormularioSelecionado: self.FormularioSelecionado,
+            tempo: self.model.tempo,
+            cnh: self.model.cnh,
+            additionalEmails: self.model.additionalEmails,
+            conta: self.model.conta,
+            renavam: self.model.renavam,
+            valorentrada: self.model.valorentrada,
+            abertura: self.model.abertura,
+            placa: self.model.placa,
+            chassi: self.model.chassi,
+            arquivo: self.arquivo,
+            valordecompra: self.model.valordecompra,
+            marca: self.model.marca,
+            versao: self.model.versao,
+            cor: self.model.cor,
+            fabricacao: self.model.fabricacao,
+            parcelar: self.model.parcelar,
+            outraseguradora: self.model.outraseguradora,
+            seguro: self.model.seguro,
+            banco: self.model.banco,
+            agencia: self.model.agencia,
+            numero: self.model.numero,
+            expedicao: self.model.expedicao,
+            Ativo: self.model.Ativo,
+            endereco: self.model.endereco,
+            oe: self.model.oe,
+            uf: self.model.uf,
+            nome: self.model.nome,
+            cpf: self.model.cpf,
+            rg: self.model.rg,
+            datadenascimento: self.model.datadenascimento,
+            estado: self.model.estado,
+            cidade: self.model.cidade,
+            renda: self.model.renda,
+            profissao: self.model.profissao,
+            cargo: self.model.cargo,
+            cnpj2: self.model.cnpj2,
+            razaosocial: self.model.razaosocial,
+            cep2: self.model.cep2,
+            telefone2: self.model.telefone2,
+            data2: self.model.data2,
+            faturamento: self.model.faturamento,
+            assinar: self.model.assinar,
+            aposentadoria: self.model.aposentadoria,
+            beneficio: self.model.beneficio,
+            atividade: self.model.atividade,
+            nomeempresa: self.model.nomeempresa,
+            admissao: self.model.admissao,
+            telefoneempresa: self.model.telefoneempresa,
+            comprovante: self.model.comprovante,
+            telefonefixo: self.model.telefonefixo,
+            celular: self.model.celular,
+            pai: self.model.pai,
+            mae: self.model.mae,
+          },
         })
         .then(() => {
           self.loading = true;
@@ -1148,6 +1168,7 @@ export default {
       self.$api
         .put("financiamentos/" + self.finanID.id, {
           data: {
+            child_of: child_of,
             email: self.model.email,
             FormularioSelecionado: self.FormularioSelecionado,
             tempo: self.model.tempo,
@@ -1160,7 +1181,6 @@ export default {
             placa: self.model.placa,
             chassi: self.model.chassi,
             arquivo: self.arquivo,
-            child_of: child_of,
             valordecompra: self.model.valordecompra,
             marca: self.model.marca,
             versao: self.model.versao,

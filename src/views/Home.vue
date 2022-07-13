@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app class="bg">
     <SideBar />
     <v-container>
       <v-app-bar color="rgba(0,0,0,0)" flat>
@@ -7,67 +7,70 @@
           <h2 class="font-weight-medium" style="font-size: 35px">Dashboard</h2>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon dark class="">
-          <v-icon color="black">mdi-android</v-icon>
-        </v-btn>
-        <v-btn icon dark class="">
-          <v-icon color="black">mdi-apple</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon color="black">mdi-help-circle-outline</v-icon>
-        </v-btn>
+        <div>
+          <v-btn icon dark class="">
+            <v-icon color="black">mdi-android</v-icon>
+          </v-btn>
+        </div>
+        <div>
+          <v-btn icon dark class="">
+            <v-icon color="black">mdi-apple</v-icon>
+          </v-btn>
+        </div>
+        <div>
+          <v-btn icon>
+            <v-icon color="black">mdi-help-circle-outline</v-icon>
+          </v-btn>
+        </div>
       </v-app-bar>
-      <v-spacer></v-spacer>
+
       <v-row>
         <v-col cols="12" sm="8">
-          <v-card flat>
-            <v-carousel
-              :show-arrows="false"
-              height="100%"
-              tile
-              cycle
-              hide-delimiter-background
-              delimiter-icon="mdi-minus"
-            >
-              <v-carousel-item
-                v-for="(item, i) in items"
-                :key="i"
-                :src="item.src"
+          <v-col cols="12">
+            <v-card flat>
+              <v-carousel
+                :show-arrows="false"
+                height="100%"
+                tile
+                cycle
+                hide-delimiter-background
+                delimiter-icon="mdi-minus"
               >
-              </v-carousel-item>
-            </v-carousel>
-          </v-card>
+                <v-carousel-item
+                  v-for="(item, i) in items"
+                  :key="i"
+                  :src="item.src"
+                >
+                </v-carousel-item>
+              </v-carousel>
+            </v-card>
+          </v-col>
           <v-toolbar flat color="rgba(0,0,0,0)" dense class="mt-n1">
             <v-spacer></v-spacer>
             <span class="grey--text"></span>
           </v-toolbar>
           <v-row class="mt-n5">
             <v-col>
-              <v-card flat class="mx-1 pa-10">
-                <v-card color="#E3F2FD" outlined flat>
-                  <v-card-title>
-                    <v-icon color="#30C3CF">mdi-bag-checked</v-icon>
-                  </v-card-title>
-                  <v-card-text class="font-weight-medium">
-                    Boletos hoje
-                  </v-card-text>
-                  <h3 class="pa-5">R$ 0,00</h3>
-                  <v-spacer></v-spacer>
-                </v-card>
+              <v-card outlined>
+                <v-card-title>
+                  <v-icon color="#30C3CF">mdi-bag-checked</v-icon>
+                </v-card-title>
+                <v-card-text class="font-weight-medium">
+                  Boletos hoje
+                </v-card-text>
+                <h3 class="pa-5">R$ 0,00</h3>
               </v-card>
             </v-col>
             <v-col>
-              <v-card flat class="mx-1 pa-10">
-                <v-card outlined>
-                  <v-card-title>
-                    <v-icon color="#30C3CF">mdi-bag-checked</v-icon>
-                  </v-card-title>
-                  <v-card-text class="font-weight-medium">
-                    Últimos 30 dias
-                  </v-card-text>
-                  <h3 class="pa-5">R$ 0,00</h3>
-                  <v-spacer></v-spacer>
-                </v-card>
+              <v-card outlined>
+                <v-card-title>
+                  <v-icon color="#30C3CF">mdi-bag-checked</v-icon>
+                </v-card-title>
+                <v-card-text class="font-weight-medium">
+                  Últimos 30 dias
+                </v-card-text>
+                <h3 class="pa-5">R$ 0,00</h3>
+                <v-spacer></v-spacer>
               </v-card>
             </v-col>
           </v-row>
@@ -95,49 +98,41 @@
           </v-col>
         </v-col>
         <v-col cols="12" sm="4">
-          <v-card class="rounded pa-8" color="blue lighten-5" flat>
-            <v-toolbar flat color="rgba(0,0,0,0)" dense class="mt-1">
-              <br />
-              <body>
+          <v-col>
+            <v-card class="rounded pa-8" color="blue lighten-5" flat>
+              <div>
                 <h5 class="blue--text">
                   Você deve concluir a Verificação de Identidade para ter acesso
                   aos serviços bancários do Cobgen.
                 </h5>
-              </body>
-              <v-btn small color="primary" href="/conta" dark>Verificar</v-btn>
-            </v-toolbar>
-          </v-card>
-          <v-col>
-            <v-card class="mx-4 pa-10" outlined>
-              <v-card flat>
-                <p>Meu saldo</p>
-                <v-spacer></v-spacer>
-                <h1 class="cyan--text">R$ 0,00</h1>
-                <v-col></v-col>
-                <h5>Saldo Bloqueado</h5>
-                <v-spacer></v-spacer>
-                <h5 class="orange--text">R$ 0,00</h5>
-              </v-card>
-              <v-col></v-col>
-              <v-card flat>
-                <h4>Cobranças por dispositivos</h4>
-                <h6 class="font-weight-light">
-                  Dados refere-se aos últimos 7 dias
-                </h6>
-              </v-card>
-              <v-col></v-col>
-              <v-card flat>
-                <h5>Cobranças recentes</h5>
-                <v-btn
-                  class="ma-2"
-                  outlined
-                  color="blue"
-                  large
-                  href="/cobrancas"
+              </div>
+              <v-col>
+                <v-btn small color="primary" href="/conta" dark
+                  >Verificar</v-btn
                 >
+              </v-col>
+            </v-card>
+          </v-col>
+          <v-col>
+            <v-card class="rounded pa-6" outlined flat>
+              <p class="text-center">Meu saldo</p>
+              <v-spacer></v-spacer>
+              <p class="green--text text-center" style="font-size: 30px">
+                R$ 0,00
+              </p>
+              <v-spacer></v-spacer>
+              <p class="text-center">Saldo Bloqueado</p>
+              <v-spacer></v-spacer>
+              <p class="red--text text-center" style="font-size: 30px">
+                R$ 0,00
+              </p>
+              <v-spacer></v-spacer>
+              <p class="text-center">Cobranças recentes</p>
+              <div class="text-center">
+                <v-btn outlined color="blue" small href="/cobrancas">
                   <h5>Ver todas as cobranças</h5></v-btn
                 >
-              </v-card>
+              </div>
             </v-card>
           </v-col>
         </v-col>
@@ -178,6 +173,12 @@ export default {
 </script>
 
 <style scoped>
+.bg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
 .v-sheet--offset {
   top: -24px;
   position: relative;

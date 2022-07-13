@@ -201,7 +201,6 @@ export default {
     openCadastroDialog() {
       this.$refs["cadastra-dialog"].open(false);
     },
-
     getCliente() {
       let self = this;
       self.$api
