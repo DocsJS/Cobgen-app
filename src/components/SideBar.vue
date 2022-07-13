@@ -5,7 +5,6 @@
     app
     :mini-variant.sync="mini"
     mini-variant-width="70"
-    class="elevation-1"
   >
     <v-col>
       <v-btn @click.stop="mini = !mini" icon x-large text>
@@ -21,7 +20,6 @@
     >
       <v-img src="../assets/cobgen.png"></v-img>
     </v-list-item-avatar>
-
     <v-list nav dense>
       <v-list-item-group v-model="selectedItem">
         <v-list-item
@@ -170,5 +168,6 @@ export default {
 <style>
 .v-list-item-group .v-list-item--active {
   color: #30c3cf !important;
+  position: relative;
 }
 </style>
