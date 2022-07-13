@@ -20,7 +20,17 @@
     >
       <v-img src="../assets/cobgen.png"></v-img>
     </v-list-item-avatar>
-    <v-list nav dense>
+    <v-list
+      nav
+      dense
+      style="
+        position: absolute;
+        margin-left: auto;
+        margin-right: auto;
+        left: 0;
+        right: 0;
+      "
+    >
       <v-list-item-group v-model="selectedItem">
         <v-list-item
           v-for="(item, i) in items"
