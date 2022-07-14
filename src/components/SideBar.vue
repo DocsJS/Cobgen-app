@@ -3,34 +3,20 @@
     v-model="drawer"
     permanent
     app
+    expand-on-hover
+    width="17%"
     :mini-variant.sync="mini"
-    mini-variant-width="70"
+    mini-variant-width="55"
   >
-    <v-col>
+    <!-- <v-col>
       <v-btn @click.stop="mini = !mini" icon x-large text>
-        <vue-star animate="animated bounce" color="cyan">
-          <i slot="icon" class="fa fa-bars"></i>
-        </vue-star>
+        <v-icon>mdi-menu</v-icon>
       </v-btn>
-    </v-col>
-    <v-list-item-avatar
-      class="d-block text-center mx-auto mt-4"
-      color=""
-      size="70"
-    >
+    </v-col> -->
+    <v-list-item-avatar class="d-block mx-auto" flat size="64">
       <v-img src="../assets/cobgen.png"></v-img>
     </v-list-item-avatar>
-    <v-list
-      nav
-      dense
-      style="
-        position: absolute;
-        margin-left: auto;
-        margin-right: auto;
-        left: 0;
-        right: 0;
-      "
-    >
+    <v-list nav dense>
       <v-list-item-group v-model="selectedItem">
         <v-list-item
           v-for="(item, i) in items"
@@ -119,7 +105,6 @@
 </template>
 
 <script>
-import VueStar from "vue-star";
 export default {
   data: () => ({
     selectedItem: null,
@@ -160,7 +145,7 @@ export default {
     ],
   }),
   components: {
-    VueStar,
+    // VueStar,
   },
   methods: {
     logout() {
