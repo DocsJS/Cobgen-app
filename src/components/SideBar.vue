@@ -16,7 +16,7 @@
     <v-list-item-avatar class="d-block mx-auto" flat size="64">
       <v-img src="../assets/cobgen.png"></v-img>
     </v-list-item-avatar>
-    <v-list nav dense>
+    <v-list dense>
       <v-list-item-group v-model="selectedItem">
         <v-list-item
           v-for="(item, i) in items"
