@@ -4,9 +4,7 @@
     <v-container>
       <v-app-bar color="rgba(0,0,0,0)" flat>
         <div>
-          <h2 class="font-weight-medium" style="font-size: 35px">
-            Meus Planos
-          </h2>
+          <h2 class="font-weight-medium" style="font-size: 35px">Planos</h2>
         </div>
 
         <v-spacer></v-spacer>
@@ -14,7 +12,7 @@
         <v-dialog v-model="dialog" persistent max-width="800px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#30c3cf" dark large v-bind="attrs" v-on="on">
-              <h5>Criar novo plano</h5>
+              <h5>Novo plano</h5>
             </v-btn>
           </template>
 
@@ -29,7 +27,7 @@
                 <v-switch
                   label="Ativar Plano"
                   inset
-                  v-model="model.ativo"
+                  v-model="model.Ativo"
                   color="cyan"
                   style="margin-right: 0"
                 >
@@ -172,9 +170,6 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-btn icon>
-          <v-icon color="black">mdi-help-circle-outline</v-icon>
-        </v-btn>
       </v-app-bar>
       <v-row>
         <v-col sm="8" class="pa-7">
@@ -210,7 +205,7 @@
                 >
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
+                  <v-btn color="red" text @click="closeDelete">Cancelar</v-btn>
                   <v-btn
                     color="green"
                     text
@@ -236,8 +231,8 @@
             >mdi-delete</v-icon
           >
         </template>
-        <template v-slot:[`item.ativo`]="{ item }">
-          {{ item.ativo ? "Ativo" : "Inativo" }}
+        <template v-slot:[`item.Ativo`]="{ item }">
+          {{ item.Ativo ? "Ativo" : "Inativo" }}
         </template>
       </v-data-table>
     </v-col>
@@ -266,7 +261,7 @@ export default {
         { text: "Preço", value: "preco" },
         { text: "Cobrar a cada", value: "cobrancaACada" },
         { text: "Ciclos de cobrança", value: "numeroDeCobranca" },
-        { text: "Ativo", value: "ativo" },
+        { text: "Ativo", value: "Ativo" },
         { text: "Ações", value: "actions", sortable: false },
       ],
       planos: [],
@@ -281,7 +276,7 @@ export default {
         taxaDeConfiguracao: "",
         imposto: "",
         descricaoDoPlano: "",
-        ativo: true,
+        Ativo: true,
         permitirClientesAddComplemento: false,
         fields: [],
       },
@@ -297,7 +292,7 @@ export default {
         taxaDeConfiguracao: "",
         imposto: "",
         descricaoDoPlano: "",
-        ativo: true,
+        Ativo: true,
         permitirClientesAddComplemento: false,
         fields: [],
       },
@@ -312,7 +307,7 @@ export default {
         taxaDeConfiguracao: "",
         imposto: "",
         descricaoDoPlano: "",
-        ativo: true,
+        Ativo: true,
         permitirClientesAddComplemento: false,
         fields: [],
       },
@@ -377,7 +372,7 @@ export default {
             taxaDeConfiguracao: self.model.taxaDeConfiguracao,
             imposto: self.model.imposto,
             descricaoDoPlano: self.model.descricaoDoPlano,
-            ativo: self.model.ativo,
+            Ativo: self.model.Ativo,
             fields: self.model.fields,
             permitirClientesAddComplemento:
               self.model.permitirClientesAddComplemento,
@@ -408,7 +403,7 @@ export default {
             taxaDeConfiguracao: self.model.taxaDeConfiguracao,
             imposto: self.model.imposto,
             descricaoDoPlano: self.model.descricaoDoPlano,
-            ativo: self.model.ativo,
+            Ativo: self.model.Ativo,
             fields: self.model.fields,
             permitirClientesAddComplemento:
               self.model.permitirClientesAddComplemento,

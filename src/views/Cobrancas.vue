@@ -4,77 +4,42 @@
     <v-container>
       <v-app-bar color="rgba(0,0,0,0)" flat>
         <div>
-          <h2 class="font-weight-medium" style="font-size: 35px">
-            Minhas Cobranças
-          </h2>
+          <h2 class="font-weight-medium" style="font-size: 35px">Cobranças</h2>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon color="black">mdi-help-circle-outline</v-icon>
-        </v-btn>
+
+        <v-dialog v-model="dialog" persistent max-width="600px">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="#30c3cf" dark large v-bind="attrs" v-on="on">
+              <h5>Nova cobrança</h5>
+            </v-btn>
+          </template>
+        </v-dialog>
       </v-app-bar>
-      <v-spacer></v-spacer>
       <v-row>
-        <v-col cols="12" sm="20">
-          <v-card class="rounded pa-8" color="blue lighten-4" outlined>
-            <h4 class="text-center">Total de total Vendas</h4>
-          </v-card>
-          <v-toolbar flat color="rgba(0,0,0,0)" dense class="mt-n1">
-            <v-spacer></v-spacer>
-            <span class="grey--text"></span>
-          </v-toolbar>
+        <v-col sm="8" class="pa-7">
+          <v-navigation-drawer
+            permanent
+            expand-on-hover
+            mini-variant
+            mini-variant-width="250"
+          >
+            <v-text-field
+              class="text-left"
+              color="cyan"
+              outlined
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Buscar"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-navigation-drawer>
         </v-col>
       </v-row>
+      <v-spacer></v-spacer>
     </v-container>
     <v-col>
-      <v-card-title>
-        <v-row>
-          <v-col>
-            <v-menu
-              v-model="menu2"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="auto"
-            >
-              <template v-slot:activator="{ on, attrs }">
-                <v-col sm="7">
-                  <v-text-field
-                    v-model="dates"
-                    label="Date range"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                    v-bind="attrs"
-                    v-on="on"
-                  ></v-text-field>
-                </v-col>
-              </template>
-              <v-date-picker v-model="dates" range></v-date-picker>
-            </v-menu>
-          </v-col>
-        </v-row>
-        <v-spacer></v-spacer>
-        <v-col cols="12" sm="3">
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="Search"
-            single-line
-            hide-details
-            outlined
-          ></v-text-field>
-        </v-col>
-        <v-col>
-          <v-dialog v-model="dialog" persistent max-width="600px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="#30c3cf" dark large v-bind="attrs" v-on="on">
-                <h5>Criar cobrança</h5>
-              </v-btn>
-            </template>
-          </v-dialog>
-        </v-col>
-      </v-card-title>
       <v-data-table
         :search="search"
         :headers="headers"
@@ -94,11 +59,11 @@
                       <v-col>
                         <h5>Cliente</h5>
                         <v-select
-                          v-model="clienteSelecionado"
-                          offset-y
                           item-value="id"
                           item-text="nome"
+                          v-model="clienteSelecionado"
                           :items="cliente"
+                          :filter="customFilter"
                           label="Selecione o cliente"
                           outlined
                           solo
@@ -108,18 +73,37 @@
                       </v-col>
                       <v-col>
                         <h5>Selecione o plano desejado</h5>
-                        <v-select
-                          v-model="planoSelecionado"
-                          offset-y
-                          item-value="id"
-                          item-text="nomePlano"
-                          :items="planos"
-                          label="Selecione o plano"
-                          outlined
-                          solo
-                          flat
-                          color="cyan"
-                        ></v-select>
+                        <v-flex>
+                          <v-autocomplete
+                            item-value="id"
+                            item-text="nomePlano"
+                            :items="planos"
+                            :filter="customFilter"
+                            v-model="planoSelecionado"
+                            outlined
+                            chips
+                            solo
+                            flat
+                            color="cyan"
+                          >
+                            <template v-slot:item="data">
+                              <v-list-item-content>
+                                <v-list-item-title
+                                  v-html="data.item.nomePlano"
+                                ></v-list-item-title>
+                                <v-list-item-subtitle
+                                  v-html="data.item.nomeUnidade"
+                                ></v-list-item-subtitle>
+                                <v-list-item-subtitle
+                                  v-html="data.item.codigoPlano"
+                                ></v-list-item-subtitle>
+                                <v-list-item-subtitle
+                                  v-html="data.item.preco"
+                                ></v-list-item-subtitle>
+                              </v-list-item-content>
+                            </template>
+                          </v-autocomplete>
+                        </v-flex>
                       </v-col>
                       <v-col>
                         <h5>Valor</h5>
@@ -190,14 +174,15 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-            <v-dialog v-model="dialogDelete" max-width="510px">
+            <v-dialog v-model="dialogDelete" max-width="540px">
               <v-card>
-                <v-card-title class="text-h3"
-                  >Você tem certeza que deseja remover este plano?</v-card-title
+                <v-card-title class="text-h8"
+                  >Você tem certeza que deseja remover esta
+                  cobrança?</v-card-title
                 >
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="red" text @click="closeDelete">Cancel</v-btn>
+                  <v-btn color="red" text @click="closeDelete">Cancelar</v-btn>
                   <v-btn
                     color="green"
                     text
@@ -361,51 +346,29 @@ export default {
       ],
       assinaturas: [],
       model: {
-        cliente: "",
-        nomePlano: "",
-        cpfCnpj: "",
-        email: "",
-        phone: "",
-        address: "",
-        addressNumber: "",
-        complement: "",
-        province: "",
-        postalCode: "",
-        externalReference: "",
-        notification: "",
-        additionalEmails: "",
-        observations: "",
-        groupName: "",
-        admin: null,
+        nome: "",
+        value: "",
+        descripition: "",
+        billingType: "",
+        dueDate: "",
+        plano: "",
       },
       defaultItem: {
-        cliente: "",
-        nomePlano: "",
-        cpfCnpj: "",
-        email: "",
-        phone: "",
-        address: "",
-        addressNumber: "",
-        complement: "",
-        province: "",
-        postalCode: "",
-        externalReference: "",
-        notificationDisabled: "",
-        additionalEmails: "",
-        observations: "",
-        groupName: "",
-        admin: "",
+        nome: "",
+        value: "",
+        descripition: "",
+        billingType: "",
+        dueDate: "",
         plano: "",
       },
       editedIndex: -1,
       editedItem: {
-        cliente: "",
-
-        billingType: "",
+        nome: "",
         value: "",
-        dueDate: "",
         descripition: "",
-        nomePlano: "",
+        billingType: "",
+        dueDate: "",
+        plano: "",
       },
       cobrancas: [],
       cliente: [
@@ -463,28 +426,16 @@ export default {
     },
     novaCobranca() {
       let self = this;
-      self.model["plano"] = self.planoSelecionado;
-      self.model["cliente"] = self.clienteSelecionado;
       const child_of = self.$store.state.app.user.id;
       self.$api
         .post("cobrancas", {
           data: {
-            cliente: self.model.cliente,
+            nome: self.model.nome,
+            value: self.model.value,
+            descripition: self.model.descripition,
+            billingType: self.model.billingType,
+            dueDate: self.model.dueDate,
             plano: self.model.plano,
-            cpfCnpj: self.model.cpfCnpj,
-            email: self.model.email,
-            phone: self.model.phone,
-            address: self.model.address,
-            addressNumber: self.model.addressNumber,
-            complement: self.model.complement,
-            province: self.model.province,
-            postalCode: self.model.postalCode,
-            externalReference: self.model.externalReference,
-            notification: self.model.notification,
-            additionalEmails: self.model.additionalEmails,
-            observations: self.model.observations,
-            groupName: self.model.groupName,
-            admin: self.model.admin,
             child_of: child_of,
           },
         })
@@ -493,33 +444,21 @@ export default {
             self.dialog = false;
             self.getCobrancas();
           }, 1000);
-          console.log(self.model["cliente"]);
         });
     },
     save() {
       let self = this;
-      self.model["cliente"] = self.clienteSelecionado;
-      self.model["plano"] = self.planoSelecionado;
+
       const child_of = self.$store.state.app.user.id;
       self.$api
         .put("cobrancas/" + self.model.id, {
           data: {
-            cliente: self.model.cliente,
+            nome: self.model.nome,
+            value: self.model.value,
+            descripition: self.model.descripition,
+            billingType: self.model.billingType,
+            dueDate: self.model.dueDate,
             plano: self.model.plano,
-            cpfCnpj: self.model.cpfCnpj,
-            email: self.model.email,
-            phone: self.model.phone,
-            address: self.model.address,
-            addressNumber: self.model.addressNumber,
-            complement: self.model.complement,
-            province: self.model.province,
-            postalCode: self.model.postalCode,
-            externalReference: self.model.externalReference,
-            notification: self.model.notification,
-            additionalEmails: self.model.additionalEmails,
-            observations: self.model.observations,
-            groupName: self.model.groupName,
-            admin: self.model.admin,
             child_of: child_of,
           },
         })

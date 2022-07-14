@@ -14,13 +14,10 @@
         <v-dialog v-model="dialog" persistent max-width="600px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#30c3cf" dark large v-bind="attrs" v-on="on">
-              <h5>Enviar proposta</h5>
+              <h5>Proposta</h5>
             </v-btn>
           </template>
         </v-dialog>
-        <v-btn icon>
-          <v-icon color="black">mdi-help-circle-outline</v-icon>
-        </v-btn>
       </v-app-bar>
       <v-row>
         <v-col sm="8" class="pa-7">

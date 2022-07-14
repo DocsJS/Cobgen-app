@@ -8,14 +8,11 @@
         </div>
         <v-spacer></v-spacer>
         <v-btn color="#30c3cf" dark large @click="openCadastroDialog">
-          <h5>Cadastrar cliente</h5>
-        </v-btn>
-        <v-btn icon>
-          <v-icon color="black">mdi-help-circle-outline</v-icon>
+          <h5>Novo cliente</h5>
         </v-btn>
       </v-app-bar>
       <v-row>
-        <v-col sm="7" class="pa-7">
+        <v-col sm="8" class="pa-7">
           <v-navigation-drawer
             permanent
             expand-on-hover
@@ -28,7 +25,7 @@
               outlined
               v-model="search"
               append-icon="mdi-magnify"
-              label="Buscar "
+              label="Buscar"
               single-line
               hide-details
             ></v-text-field>
@@ -38,12 +35,7 @@
       <v-spacer></v-spacer>
     </v-container>
     <v-col>
-      <v-data-table
-        :search="search"
-        :headers="headers"
-        :items="cliente"
-        class="elevation-1"
-      >
+      <v-data-table :search="search" :headers="headers" :items="cliente">
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon small class="mr-2" color="primary" @click="editItem(item)"
             >mdi-pencil</v-icon
@@ -61,9 +53,9 @@
         </template>
       </v-data-table>
       <Cadastra ref="cadastra-dialog" @closed="getCliente()" />
-      <v-dialog v-model="dialogDelete" max-width="520px">
+      <v-dialog v-model="dialogDelete" max-width="540px">
         <v-card>
-          <v-card-title class="text-h5"
+          <v-card-title class="text-h8"
             >Você tem certeza que deseja remover este cliente?</v-card-title
           >
           <v-card-actions>
