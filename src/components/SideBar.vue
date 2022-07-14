@@ -169,5 +169,6 @@ export default {
 <style>
 .v-list-item-group .v-list-item--active {
   color: #30c3cf !important;
+  position: start;
 }
 </style>
