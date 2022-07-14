@@ -5,8 +5,6 @@
     app
     expand-on-hover
     width="17%"
-    :mini-variant.sync="mini"
-    mini-variant-width="55"
   >
     <!-- <v-col>
       <v-btn @click.stop="mini = !mini" icon x-large text>
