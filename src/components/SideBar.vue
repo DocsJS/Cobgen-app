@@ -18,28 +18,10 @@
     </v-list-item-avatar>
     <v-list dense>
       <v-list-item-group v-model="selectedItem">
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="`vendas-root-${i}`"
-          :to="item.to"
-        >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-group
-          v-model="selectedItem3"
-          prepend-icon="mdi-archive-outline"
-        >
-          <template v-slot:activator>
-            <v-list-item-title>Vendas</v-list-item-title>
-          </template>
+        <div class="d-block mx-auto">
           <v-list-item
-            v-for="(item, i) in items3"
-            :key="`vendas-item-${i}`"
+            v-for="(item, i) in items"
+            :key="`vendas-root-${i}`"
             :to="item.to"
           >
             <v-list-item-icon>
@@ -49,17 +31,55 @@
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-group>
-        <v-list-group
-          v-model="selectedItem2"
-          prepend-icon="mdi-dots-horizontal"
-        >
-          <template v-slot:activator>
-            <v-list-item-title>Ver mais</v-list-item-title>
-          </template>
+        </div>
+        <div class="d-block mx-auto">
+          <v-list-group
+            v-model="selectedItem3"
+            prepend-icon="mdi-archive-outline"
+          >
+            <template v-slot:activator>
+              <v-list-item-title>Vendas</v-list-item-title>
+            </template>
+            <v-list-item
+              v-for="(item, i) in items3"
+              :key="`vendas-item-${i}`"
+              :to="item.to"
+            >
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+        </div>
+        <div class="d-block mx-auto">
+          <v-list-group
+            v-model="selectedItem2"
+            prepend-icon="mdi-dots-horizontal"
+          >
+            <template v-slot:activator>
+              <v-list-item-title>Ver mais</v-list-item-title>
+            </template>
+            <v-list-item
+              v-for="(item, i) in items2"
+              :key="`see-more-root-${i}`"
+              :to="item.to"
+            >
+              <v-list-item-icon>
+                <v-icon v-text="item.icon"></v-icon>
+              </v-list-item-icon>
+              <v-list-item-content>
+                <v-list-item-title v-text="item.text"></v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+        </div>
+        <div class="d-block mx-auto">
           <v-list-item
-            v-for="(item, i) in items2"
-            :key="`see-more-root-${i}`"
+            v-for="(item, i) in items4"
+            :key="`see-more-item-${i}`"
             :to="item.to"
           >
             <v-list-item-icon>
@@ -69,19 +89,7 @@
               <v-list-item-title v-text="item.text"></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-group>
-        <v-list-item
-          v-for="(item, i) in items4"
-          :key="`see-more-item-${i}`"
-          :to="item.to"
-        >
-          <v-list-item-icon>
-            <v-icon v-text="item.icon"></v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.text"></v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        </div>
       </v-list-item-group>
     </v-list>
     <!-- Logout -->
@@ -163,6 +171,5 @@ export default {
 <style>
 .v-list-item-group .v-list-item--active {
   color: #30c3cf !important;
-  position: relative;
 }
 </style>
