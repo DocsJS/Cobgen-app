@@ -519,7 +519,7 @@
                     <v-app-bar color="rgba(0,0,0,0)" flat>
                       <div>
                         <h2 class="font-weight-medium" style="font-size: 35px">
-                          Meus Operadores
+                          Operadores
                         </h2>
                       </div>
 
@@ -534,7 +534,7 @@
                             v-bind="attrs"
                             v-on="on"
                           >
-                            <h5>Cadastrar Operador</h5>
+                            <h5>Novo</h5>
                           </v-btn>
                         </template>
                       </v-dialog>

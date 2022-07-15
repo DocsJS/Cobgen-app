@@ -369,7 +369,6 @@ export default {
     },
     save() {
       let self = this;
-
       const child_of = self.$store.state.app.user.id;
       self.$api
         .put(`clientes/${self.model.id}?populate=child_of` + self.plano, {

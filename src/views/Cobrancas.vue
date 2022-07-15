@@ -63,7 +63,6 @@
                           item-text="nome"
                           v-model="clienteSelecionado"
                           :items="cliente"
-                          :filter="customFilter"
                           label="Selecione o cliente"
                           outlined
                           solo
@@ -351,7 +350,7 @@ export default {
         descripition: "",
         billingType: "",
         dueDate: "",
-        plano: "",
+        plano: null,
       },
       defaultItem: {
         nome: "",
@@ -359,7 +358,7 @@ export default {
         descripition: "",
         billingType: "",
         dueDate: "",
-        plano: "",
+        plano: null,
       },
       editedIndex: -1,
       editedItem: {
@@ -368,7 +367,7 @@ export default {
         descripition: "",
         billingType: "",
         dueDate: "",
-        plano: "",
+        plano: null,
       },
       cobrancas: [],
       cliente: [
@@ -406,6 +405,20 @@ export default {
   },
 
   methods: {
+    customFilter(item, queryText) {
+      const nome = item.nomePlano.toLowerCase();
+      const classe = item.nomeUnidade.toLowerCase();
+      const code = item.codigoPlano.toLowerCase();
+      const preco = item.preco.toLowerCase();
+      const searchText = queryText.toLowerCase();
+
+      return (
+        nome.indexOf(searchText) > -1 ||
+        classe.indexOf(searchText) > -1 ||
+        code.indexOf(searchText) > -1 ||
+        preco.indexOf(searchText) > -1
+      );
+    },
     getCobrancas() {
       let self = this;
       self.$api
@@ -428,37 +441,38 @@ export default {
       let self = this;
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .post("cobrancas", {
+        .post("cobrancas?populate=*", {
           data: {
             nome: self.model.nome,
             value: self.model.value,
             descripition: self.model.descripition,
             billingType: self.model.billingType,
             dueDate: self.model.dueDate,
-            plano: self.model.plano,
+            plano: self.planoSelecionado,
             child_of: child_of,
           },
         })
         .then(() => {
           setTimeout(() => {
             self.dialog = false;
+            self.model = {};
+            self.planoSelecionado = null;
             self.getCobrancas();
           }, 1000);
         });
     },
     save() {
       let self = this;
-
       const child_of = self.$store.state.app.user.id;
       self.$api
-        .put("cobrancas/" + self.model.id, {
+        .put(`cobrancas/${self.model.id}?populate=child_of` + self.plano, {
           data: {
             nome: self.model.nome,
             value: self.model.value,
             descripition: self.model.descripition,
             billingType: self.model.billingType,
             dueDate: self.model.dueDate,
-            plano: self.model.plano,
+            plano: self.planoSelecionado,
             child_of: child_of,
           },
         })
@@ -531,7 +545,6 @@ export default {
           self.planos = data.data.map((item) => {
             return { id: item.id, ...item.attributes };
           });
-          console.log(self.planos);
         })
         .catch((erro) => {
           console.log(erro);
