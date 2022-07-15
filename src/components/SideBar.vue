@@ -6,11 +6,6 @@
     expand-on-hover
     width="17%"
   >
-    <!-- <v-col>
-      <v-btn @click.stop="mini = !mini" icon x-large text>
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
-    </v-col> -->
     <v-list-item-avatar class="d-block mx-auto" flat size="64">
       <v-img src="../assets/cobgen.png"></v-img>
     </v-list-item-avatar>
@@ -109,7 +104,6 @@
     </div>
   </v-navigation-drawer>
 </template>
-
 <script>
 export default {
   data: () => ({

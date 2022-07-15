@@ -37,80 +37,82 @@
                         <v-card-text>
                           <h3 class="cyan--text">Dados Pessoais</h3>
                         </v-card-text>
-                        <v-container>
-                          <v-layout row>
-                            <v-col md="6">
-                              <h5>Nome</h5>
-                              <v-text-field
-                                v-model="model.username"
-                                label="Digite o seu nome completo"
-                                color="cyan"
-                                solo
-                                flat
-                                persistent-hint
-                                required
-                                dense
-                                outlined
-                              >
-                              </v-text-field>
-                            </v-col>
-                            <v-col md="6">
-                              <h5>Telefone</h5>
-                              <v-text-field
-                                v-model="model.celular"
-                                type="text"
-                                @input="acceptNumber"
-                                label="Digite o número de contato"
-                                color="cyan"
-                                solo
-                                flat
-                                required
-                                dense
-                                outlined
-                              ></v-text-field>
-                            </v-col>
-                            <v-col md="6">
-                              <h5>CPF</h5>
-                              <v-text-field
-                                dense
-                                solo
-                                flat
-                                outlined
-                                color="cyan"
-                                v-model="model.cpfcnpj"
-                                label="Digite o seu cpf"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                            <v-col md="6">
-                              <h5>RG</h5>
-                              <v-text-field
-                                dense
-                                solo
-                                flat
-                                outlined
-                                color="cyan"
-                                v-model="model.rg"
-                                label="Digite o seu rg"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                            <v-col md="6">
-                              <h5>Data de nascimento</h5>
-                              <v-text-field
-                                dense
-                                solo
-                                flat
-                                outlined
-                                type="date"
-                                color="cyan"
-                                v-model="model.datadenascimento"
-                                label="Digite a data de nascimento"
-                                required
-                              ></v-text-field>
-                            </v-col>
-                          </v-layout>
-                        </v-container>
+                        <v-form v-model="valid">
+                          <v-container>
+                            <v-layout row>
+                              <v-col cols="12" md="4">
+                                <h5>Nome</h5>
+                                <v-text-field
+                                  v-model="model.username"
+                                  label="Digite o seu nome completo"
+                                  color="cyan"
+                                  solo
+                                  flat
+                                  persistent-hint
+                                  required
+                                  dense
+                                  outlined
+                                >
+                                </v-text-field>
+                              </v-col>
+                              <v-col cols="12" md="4">
+                                <h5>Telefone</h5>
+                                <v-text-field
+                                  v-model="model.celular"
+                                  type="text"
+                                  @input="acceptNumber"
+                                  label="Digite o número de contato"
+                                  color="cyan"
+                                  solo
+                                  flat
+                                  required
+                                  dense
+                                  outlined
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" md="4">
+                                <h5>CPF</h5>
+                                <v-text-field
+                                  dense
+                                  solo
+                                  flat
+                                  outlined
+                                  color="cyan"
+                                  v-model="model.cpfcnpj"
+                                  label="Digite o seu cpf"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" md="4">
+                                <h5>RG</h5>
+                                <v-text-field
+                                  dense
+                                  solo
+                                  flat
+                                  outlined
+                                  color="cyan"
+                                  v-model="model.rg"
+                                  label="Digite o seu rg"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12" md="4">
+                                <h5>Data de nascimento</h5>
+                                <v-text-field
+                                  dense
+                                  solo
+                                  flat
+                                  outlined
+                                  type="date"
+                                  color="cyan"
+                                  v-model="model.datadenascimento"
+                                  label="Digite a data de nascimento"
+                                  required
+                                ></v-text-field>
+                              </v-col>
+                            </v-layout>
+                          </v-container>
+                        </v-form>
                         <v-spacer></v-spacer>
                       </v-card>
                       <v-card flat>
@@ -119,7 +121,7 @@
                         </v-card-text>
                         <v-container>
                           <v-layout row>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>CEP</h5>
                               <v-text-field
                                 dense
@@ -132,7 +134,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Logradouro</h5>
                               <v-text-field
                                 dense
@@ -145,7 +147,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Número</h5>
                               <v-text-field
                                 dense
@@ -159,7 +161,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Bairro</h5>
                               <v-text-field
                                 dense
@@ -172,7 +174,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Complemento</h5>
                               <v-text-field
                                 dense
@@ -185,7 +187,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Cidade</h5>
                               <v-text-field
                                 dense
@@ -198,7 +200,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Estado</h5>
                               <v-text-field
                                 dense
@@ -240,7 +242,7 @@
                       <v-card flat>
                         <v-container>
                           <v-row>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Razão Social</h5>
                               <v-text-field
                                 dense
@@ -253,7 +255,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Nome Fantasia</h5>
                               <v-text-field
                                 dense
@@ -266,7 +268,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>CNPJ</h5>
                               <v-text-field
                                 dense
@@ -279,7 +281,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Contrato Social</h5>
                               <v-text-field
                                 dense
@@ -292,7 +294,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Telefone Comercial</h5>
                               <v-text-field
                                 dense
@@ -305,7 +307,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Site</h5>
                               <v-text-field
                                 dense
@@ -328,7 +330,7 @@
                         </v-card-text>
                         <v-container>
                           <v-row>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>CEP</h5>
                               <v-text-field
                                 dense
@@ -341,7 +343,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Logradouro</h5>
                               <v-text-field
                                 dense
@@ -354,7 +356,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Número</h5>
                               <v-text-field
                                 dense
@@ -368,7 +370,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Bairro</h5>
                               <v-text-field
                                 dense
@@ -381,7 +383,7 @@
                                 label="Digite o seu Bairro"
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Cidade</h5>
                               <v-text-field
                                 dense
@@ -394,7 +396,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Estado</h5>
                               <v-text-field
                                 dense
@@ -438,7 +440,7 @@
                       <v-card flat>
                         <v-container>
                           <v-row>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Nome do banco</h5>
                               <v-text-field
                                 dense
@@ -451,7 +453,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Agência</h5>
                               <v-text-field
                                 dense
@@ -465,7 +467,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Conta</h5>
                               <v-text-field
                                 dense
@@ -479,7 +481,7 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col md="6">
+                            <v-col cols="12" md="4">
                               <h5>Dígito da conta</h5>
                               <v-text-field
                                 dense
@@ -522,9 +524,7 @@
                           Operadores
                         </h2>
                       </div>
-
                       <v-spacer></v-spacer>
-
                       <v-dialog v-model="dialog" persistent max-width="600px">
                         <template v-slot:activator="{ on, attrs }">
                           <v-btn
@@ -870,7 +870,6 @@ export default {
         },
         { text: "Ações", value: "actions", sortable: false },
       ],
-
       operadors: [],
       operador: [],
       child_of: "",
@@ -965,9 +964,7 @@ export default {
     loader() {
       const l = this.loader;
       this[l] = !this[l];
-
       setTimeout(() => (this[l] = false), 1000);
-
       this.loader = null;
     },
     dialog(val) {
@@ -1115,7 +1112,6 @@ export default {
           }, 1000);
         });
     },
-
     editItem(item) {
       let self = this;
       self.editedIndex = self.user.indexOf((i) => i.id === item.id);
@@ -1137,7 +1133,6 @@ export default {
         self.getOperador();
       });
     },
-
     close() {
       let self = this;
       self.dialog = false;
@@ -1165,7 +1160,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .custom-loader {
   animation: loader 1s infinite;

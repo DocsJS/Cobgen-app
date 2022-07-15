@@ -6,16 +6,13 @@
         <div>
           <h2 class="font-weight-medium" style="font-size: 35px">Planos</h2>
         </div>
-
         <v-spacer></v-spacer>
-
         <v-dialog v-model="dialog" persistent max-width="800px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="#30c3cf" dark large v-bind="attrs" v-on="on">
               <h5>Novo plano</h5>
             </v-btn>
           </template>
-
           <v-card>
             <v-row>
               <v-col>
