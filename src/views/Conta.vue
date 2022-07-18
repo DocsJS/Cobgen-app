@@ -17,7 +17,7 @@
       <v-row>
         <v-col cols="12" sm="15">
           <v-col cols="12" sm="20">
-            <v-card flat>
+            <v-card flat style="max-height: calc(10vh - 10px)">
               <v-tabs
                 horizontal
                 centered
@@ -35,7 +35,7 @@
                     <v-card outlined>
                       <v-card flat>
                         <v-card-text>
-                          <h3 class="cyan--text">Dados Pessoais</h3>
+                          <h3 class="cyan--text text-center">Dados Pessoais</h3>
                         </v-card-text>
                         <v-form v-model="valid">
                           <v-container>
@@ -117,7 +117,9 @@
                       </v-card>
                       <v-card flat>
                         <v-card-text>
-                          <h3 class="cyan--text">Dados do Endereço</h3>
+                          <h3 class="cyan--text text-center">
+                            Dados do Endereço
+                          </h3>
                         </v-card-text>
                         <v-container>
                           <v-layout row>
@@ -212,17 +214,6 @@
                                 label="Digite o seu estado"
                                 required
                               ></v-text-field>
-                              <v-btn
-                                color="green"
-                                text
-                                @click="
-                                  doSave();
-                                  loader = 'loading';
-                                "
-                                :loading="loading"
-                                :disabled="loading"
-                                >Salvar</v-btn
-                              >
                             </v-col>
                           </v-layout>
                         </v-container>
@@ -236,7 +227,9 @@
                     <v-card outlined>
                       <v-card flat>
                         <v-card-text>
-                          <h3 class="cyan--text">Dados da Empresa</h3>
+                          <h3 class="cyan--text text-center">
+                            Dados da Empresa
+                          </h3>
                         </v-card-text>
                       </v-card>
                       <v-card flat>
@@ -326,7 +319,9 @@
                       </v-card>
                       <v-card flat>
                         <v-card-text>
-                          <h3 class="cyan--text">Dados do Endereço</h3>
+                          <h3 class="cyan--text text-center">
+                            Dados do Endereço
+                          </h3>
                         </v-card-text>
                         <v-container>
                           <v-row>
@@ -409,19 +404,6 @@
                                 required
                               ></v-text-field>
                             </v-col>
-                            <v-col>
-                              <v-btn
-                                color="green"
-                                text
-                                @click="
-                                  doSave();
-                                  loader = 'loading';
-                                "
-                                :loading="loading"
-                                :disabled="loading"
-                                >Salvar</v-btn
-                              >
-                            </v-col>
                           </v-row>
                         </v-container>
                         <v-spacer></v-spacer>
@@ -434,7 +416,9 @@
                     <v-card outlined>
                       <v-card flat>
                         <v-card-text>
-                          <h3 class="cyan--text">Cadastrar conta bancária</h3>
+                          <h3 class="cyan--text text-center">
+                            Cadastrar conta bancária
+                          </h3>
                         </v-card-text>
                       </v-card>
                       <v-card flat>
@@ -494,20 +478,6 @@
                                 label="Digite o dígito da conta"
                                 required
                               ></v-text-field>
-                            </v-col>
-                            <v-col>
-                              <v-spacer></v-spacer>
-                              <v-btn
-                                color="green"
-                                text
-                                @click="
-                                  doSave();
-                                  loader = 'loading';
-                                "
-                                :loading="loading"
-                                :disabled="loading"
-                                >Salvar</v-btn
-                              >
                             </v-col>
                           </v-row>
                         </v-container>
@@ -817,6 +787,31 @@
           </v-col>
         </v-col>
       </v-row>
+      <v-card
+        flat
+        style="height: 100px; width: 100%; position: fixed; bottom: 10px"
+        color="transparent"
+      >
+        <v-card-text>
+          <v-fab-transition>
+            <v-btn
+              style="margin-left: 10px; margin-right: auto"
+              color="green"
+              @click="
+                doSave();
+                loader = 'loading';
+              "
+              :loading="loading"
+              :disabled="loading"
+              v-show="!hidden"
+              dark
+              outlined
+            >
+              <p>Salvar</p>
+            </v-btn>
+          </v-fab-transition>
+        </v-card-text>
+      </v-card>
     </v-container>
   </v-app>
 </template>
