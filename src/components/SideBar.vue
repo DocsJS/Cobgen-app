@@ -105,64 +105,75 @@
   </v-navigation-drawer>
 </template>
 <script>
-export default {
-  data: () => ({
-    selectedItem: null,
-    selectedItem2: null,
-    selectedItem3: null,
-    selectedItem4: null,
-    drawer: null,
-    mini: true,
-    items: [
-      { text: "Início", icon: "mdi-monitor-dashboard", to: "/" },
-      { text: "Relatórios", icon: "mdi-chart-bar-stacked", to: "/relatorios" },
-      { text: "Clientes", icon: "mdi-account-group-outline", to: "/clientes" },
-    ],
-    items2: [
-      { text: "Seguros", icon: "mdi-plus-outline", to: "/seguros" },
-      {
-        text: "Financiamentos",
-        icon: "mdi-car",
-        to: "/financiamentos",
-      },
-    ],
-    items3: [
-      { text: "Minhas cobranças", icon: "mdi-finance", to: "/cobrancas" },
-      {
-        text: "Planos",
-        icon: "mdi-package-variant-closed",
-        to: "/planos",
-      },
+  export default {
+    data: () => ({
+      selectedItem: null,
+      selectedItem2: null,
+      selectedItem3: null,
+      selectedItem4: null,
+      drawer: null,
+      mini: true,
+      items: [
+        { text: "Início", icon: "mdi-monitor-dashboard", to: "/" },
+        {
+          text: "Relatórios",
+          icon: "mdi-chart-bar-stacked",
+          to: "/relatorios",
+        },
+        {
+          text: "Clientes",
+          icon: "mdi-account-group-outline",
+          to: "/clientes",
+        },
+      ],
+      items2: [
+        { text: "Seguros", icon: "mdi-plus-outline", to: "/seguros" },
+        {
+          text: "Financiamentos",
+          icon: "mdi-car",
+          to: "/financiamentos",
+        },
+      ],
+      items3: [
+        { text: "Minhas cobranças", icon: "mdi-finance", to: "/cobrancas" },
+        {
+          text: "Planos",
+          icon: "mdi-package-variant-closed",
+          to: "/planos",
+        },
 
-      { text: "Extrato", icon: "mdi-wallet-outline", to: "/extrato" },
-    ],
-    items4: [
-      { text: "Minha conta", icon: "mdi-account-circle-outline", to: "/conta" },
-    ],
-    admins: [
-      ["Management", "mdi-account-multiple-outline"],
-      ["Settings", "mdi-cog-outline"],
-    ],
-  }),
-  components: {
-    // VueStar,
-  },
-  methods: {
-    logout() {
-      let self = this;
-      localStorage.removeItem("jwt");
-      localStorage.removeItem("user");
-      console.log(localStorage);
-      setTimeout(() => {
-        self.$router.push("/login");
-      }, 500);
+        { text: "Extrato", icon: "mdi-wallet-outline", to: "/extrato" },
+      ],
+      items4: [
+        {
+          text: "Minha conta",
+          icon: "mdi-account-circle-outline",
+          to: "/conta",
+        },
+      ],
+      admins: [
+        ["Management", "mdi-account-multiple-outline"],
+        ["Settings", "mdi-cog-outline"],
+      ],
+    }),
+    components: {
+      // VueStar,
     },
-  },
-};
+    methods: {
+      logout() {
+        let self = this;
+        self.$store.commit("app/clearStorage");
+        delete self.$api.defaults.headers.common["Authorization"];
+        setTimeout(() => {
+          self.$router.push("/login");
+        }, 500);
+      },
+    },
+  };
 </script>
 <style>
-.v-list-item-group .v-list-item--active {
-  color: #30c3cf !important;
-  position: start;
-}
+  .v-list-item-group .v-list-item--active {
+    color: #30c3cf !important;
+    position: start;
+  }
 </style>
