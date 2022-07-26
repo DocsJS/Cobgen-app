@@ -123,7 +123,7 @@
                     maxlength="8"
                     v-model="model.cep"
                   ></v-text-field>
-                  <ul class="list-group">
+                  <!-- <ul class="list-group">
                     <h3
                       class="list-group-item active cyan--text text--lighten-1"
                     >
@@ -158,7 +158,7 @@
                       <span class="font-weight-bold">Estado :</span
                       >{{ resultadoCEP.uf }}
                     </li>
-                  </ul>
+                  </ul> -->
                 </v-col>
                 <v-col>
                   <h5>complemento</h5>
