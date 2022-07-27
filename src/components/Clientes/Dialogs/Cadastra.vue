@@ -55,7 +55,7 @@
               <v-col>
                 <h5>Email</h5>
                 <v-text-field
-                  label="Digite o seu email"
+                  label="Digite o email do cliente"
                   v-model="model.email"
                   outlined
                   color="cyan"
@@ -83,6 +83,7 @@
                 <v-text-field
                   outlined
                   id="cpfInput"
+                  label="Digite o cpf do cliente"
                   type="number"
                   v-model="model.cpfCnpj"
                   @change="verificarCpf"
@@ -112,7 +113,7 @@
                 <v-col>
                   <h5>Cep</h5>
                   <v-text-field
-                    label="Para efetuar a busca de endereco digite o seu cep"
+                    label="Para efetuar a busca de endereco digite o cep desejado"
                     outlined
                     color="cyan"
                     solo
@@ -163,7 +164,7 @@
                 <v-col>
                   <h5>complemento</h5>
                   <v-text-field
-                    label="Digite o complemento do seu endereço"
+                    label="Digite o complemento do endereço desejado"
                     outlined
                     color="cyan"
                     solo
